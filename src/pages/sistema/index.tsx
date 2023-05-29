@@ -592,7 +592,7 @@ import ptBR from 'antd/lib/locale/pt_BR';
 import Title from 'antd/es/typography/Title';
 import { menus } from '../../components/Menus';
 import { removeParameterUrl } from '../../utils/UtilsSistema';
-import TrelloPage from '../demands';
+import Board from '../Board';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -963,7 +963,7 @@ const Sistema: React.FC = () => {
                     {
                       '1': <Dashboard />,
                       '5': <Dashboard />,
-                      '6': <TrelloPage />,
+                      '6': <Board />,
                     }[chave]
                   }
                 </>

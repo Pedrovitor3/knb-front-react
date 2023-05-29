@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getPhase } from '../../services/axios/phaseService';
 import { message } from 'antd';
+import { Link } from 'react-router-dom';
 
 require('./index.css');
 
@@ -15,7 +16,7 @@ interface PhaseProps {
   demands: DemandProps[];
 }
 
-const TrelloPage: React.FC = () => {
+const Board: React.FC = () => {
   const [phases, setPhases] = useState<PhaseProps[]>([]);
 
   console.log(phases);
@@ -46,7 +47,9 @@ const TrelloPage: React.FC = () => {
           <div className="demand-list">
             {phase.demands.map(demand => (
               <div className="demand" key={demand.id}>
-                <h3 className="demand-title">{demand.name}</h3>
+                <Link to={'../demanda'}>
+                  <h3 className="demand-title">{demand.name}</h3>
+                </Link>
               </div>
             ))}
           </div>
@@ -56,4 +59,4 @@ const TrelloPage: React.FC = () => {
   );
 };
 
-export default TrelloPage;
+export default Board;
