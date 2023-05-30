@@ -593,6 +593,7 @@ import Title from 'antd/es/typography/Title';
 import { menus } from '../../components/Menus';
 import { removeParameterUrl } from '../../utils/UtilsSistema';
 import Board from '../Board';
+import Stage from '../demanda';
 
 const { Header, Content, Footer, Sider } = Layout;
 

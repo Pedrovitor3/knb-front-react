@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { message } from 'antd';
-import { Link } from 'react-router-dom';
-import { getCard } from '../../services/axios/cardService';
+import { getStage } from '../../services/axios/stageService';
+import DemandCard from '../../components/DemandCard';
 
 require('./index.css');
 
@@ -10,51 +10,58 @@ interface CardProps {
   name: string;
 }
 
-interface DemandProps {
+interface StageProps {
   id: string;
   name: string;
-  cards: DemandProps[];
+  demand: string;
+  cards: CardProps[];
 }
 
-const Demanda: React.FC = () => {
-  const [demands, setdemands] = useState<DemandProps[]>([]);
+const Stage: React.FC = () => {
+  const [stages, setStages] = useState<StageProps[]>([]);
 
-  console.log(demands);
+  console.log(stages);
 
   useEffect(() => {
-    loadingdemand();
+    loadingStages();
   }, []);
 
-  async function loadingdemand() {
-    try {
-      const response = await getCard('demand');
+  async function loadingStages() {
+    const response = await getStage('stage');
 
-      if (response !== false) {
-        setdemands(response.data);
-      } else {
-        message.error('Ocorreu um erro inesperado ao obter as demandas.');
-      }
-    } catch (error) {
-      message.error('Ocorreu um erro inesperado ao obter as demandas.');
+    console.log(response); // Verifique o conteúdo da resposta
+    //console.log(id);
+
+    if (response !== false) {
+      const filteredStages = response.data.filter((stage: StageProps) => {
+        return stage.demand === demand.id;
+      });
+      setStages(filteredStages);
+    } else {
+      message.error('Ocorreu um erro inesperado ao obter as etapas.');
     }
   }
 
   return (
-    <div className="trello-page">
-      {demands.map(demand => (
-        <div className="demand" key={demand.id}>
-          <h2 className="demand-title">{demand.name}</h2>
-          <div className="demand-list">
-            {demand.cards.map(card => (
-              <div className="card" key={card.id}>
-                <h3 className="card-title">{card.name}</h3>
-              </div>
-            ))}
+    <div className="body">
+      {stages.length > 0 ? (
+        stages.map((stage: StageProps) => (
+          <div className="stage" key={stage.id}>
+            <h2 className="stage-title">{stage.name}</h2>
+            <div className="stage-cards">
+              {stage.cards.map((card: CardProps) => (
+                <div className="card" key={card.id}>
+                  <h3 className="card-title">{card.name}</h3>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      ) : (
+        <div>Loading stages...</div>
+      )}
     </div>
   );
 };
 
-export default Demanda;
+export default Stage;

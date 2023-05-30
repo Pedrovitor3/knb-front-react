@@ -1,35 +1,35 @@
 /* Estilos para a página Trello */
-.trello-page {
+.body {
   display: flex;
   justify-content: space-between;
-  height: calc(100% -28px );
-
 }
 
 /* Estilos para as fases */
 .phase {
   flex: 1;
-  margin: 0 10px;
+  margin: 0px 10px;
   padding: 10px;
   background-color: #f4f4f4;
   border-radius: 4px;
-  height: calc(100% -28px );
+  height: 450px;
 }
 
 .phase-title {
-  font-size: 18px;
-  margin-bottom: 10px;
-  color: black;
+  font-size: 22px;
+  text-align: center;
+  margin-bottom: 25px;
+  color: rgba(17, 16, 16, 0.918);
 }
 
 /* Estilos para as demandas */
 .demand {
   padding: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 10px !important;
   background-color: #fff;
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
+
 
 .demand-title {
   font-size: 16px;

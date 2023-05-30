@@ -1,8 +1,8 @@
 /* Estilos para a página Trello */
-.trello-page {
+.body {
   display: flex;
   justify-content: space-between;
-  height: calc(100% -28px );
+  height: calc(100%);
 
 }
 
