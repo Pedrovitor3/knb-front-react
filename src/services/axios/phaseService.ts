@@ -41,23 +41,24 @@ export async function postPhase(phase: Phase) {
   }
 }
 
-export const updatePhase = async (phase: Phase, id: any) => {
+export async function updatePhase(url: any, id: string) {
   try {
-    await APIPhase.put(`phase/${id}`, phase);
-    message.success('cadastrado com sucesso');
+    const response = await APIPhase.put(`url/${id}`);
+    return response;
   } catch (error) {
     if (error === 500) {
       message.info('O tempo da sua sessão expirou, faça o login novamente');
     } else if (error !== 401) {
       message.error(
-        'Não foi possível obter a lista de eixos, tente novamente mais tarde.',
+        'Não foi possível carregar o recurso, tente novamente mais tarde.',
       );
     }
     console.error(
-      `An unexpected error occurred while retrieving the axle list.${error}`,
+      `An unexpected error occurred while retrieving the resource list.${error}`,
     );
   }
-};
+  return false;
+}
 
 export async function deletePhase(id: any) {
   try {
