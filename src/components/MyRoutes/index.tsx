@@ -7,7 +7,7 @@ const MyRoutes = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Sistema />} />
-        <Route path="/stage/" element={<Stage />} />
+        <Route path="/stage/:demandId" element={<Stage />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { message } from 'antd';
+import { useParams } from 'react-router-dom';
 import { getStage } from '../../services/axios/stageService';
-import DemandCard from '../../components/DemandCard';
 
 require('./index.css');
 
@@ -13,14 +13,16 @@ interface CardProps {
 interface StageProps {
   id: string;
   name: string;
-  demand: string;
+  demand: {
+    id: string;
+  };
   cards: CardProps[];
+  demandId: string;
 }
 
 const Stage: React.FC = () => {
+  const { demandId } = useParams<{ demandId: string }>();
   const [stages, setStages] = useState<StageProps[]>([]);
-
-  console.log(stages);
 
   useEffect(() => {
     loadingStages();
@@ -29,12 +31,12 @@ const Stage: React.FC = () => {
   async function loadingStages() {
     const response = await getStage('stage');
 
-    console.log(response); // Verifique o conteúdo da resposta
-    //console.log(id);
-
     if (response !== false) {
       const filteredStages = response.data.filter((stage: StageProps) => {
-        return stage.demand === demand.id;
+        console.log('art', stage.demand.id);
+        console.log('as', demandId);
+
+        return stage.demand.id === demandId;
       });
       setStages(filteredStages);
     } else {

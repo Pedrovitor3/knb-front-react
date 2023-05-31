@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getPhase } from '../../services/axios/phaseService';
 import { message } from 'antd';
 import { Link } from 'react-router-dom';
+import Stage from '../demanda';
 
 require('./index.css');
 
@@ -42,7 +43,7 @@ const Board: React.FC = () => {
           <div className="demand-list">
             {phase.demands.map(demand => (
               <div className="demand" key={demand.id}>
-                <Link to={`/stage/`}>
+                <Link to={`/stage/${demand.id}`}>
                   <h3 className="demand-title">{demand.name}</h3>
                 </Link>
               </div>

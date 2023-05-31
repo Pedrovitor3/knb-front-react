@@ -46,6 +46,7 @@ export const menus = [
     perfis: [perfisSistema.ALL],
     children: [],
   },
+
   {
     label: 'Demandas2',
     key: '6',
