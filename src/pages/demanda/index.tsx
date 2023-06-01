@@ -15,7 +15,7 @@ interface StageProps {
   name: string;
   demand: {
     id: string;
-  };
+  } | null;
   cards: CardProps[];
   demandId: string;
 }
@@ -33,10 +33,7 @@ const Stage: React.FC = () => {
 
     if (response !== false) {
       const filteredStages = response.data.filter((stage: StageProps) => {
-        console.log('art', stage.demand.id);
-        console.log('as', demandId);
-
-        return stage.demand.id === demandId;
+        return stage.demand && stage.demand.id === demandId;
       });
       setStages(filteredStages);
     } else {

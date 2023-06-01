@@ -965,6 +965,7 @@ const Sistema: React.FC = () => {
                       '1': <Dashboard />,
                       '5': <Dashboard />,
                       '6': <Board />,
+                      '7': <Stage />,
                     }[chave]
                   }
                 </>
