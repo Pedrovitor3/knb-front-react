@@ -618,7 +618,7 @@ const Sistema: React.FC = () => {
     token: { colorBgContainer },
   } = theme.useToken();
   const [unidades, setUnidades] = useState([{ nome: '', codigo: 0 }]);
-  const [demandId, setDemandId] = useState<string | null>(null);
+  const [demandId, setDemandId] = useState<string>(''); // State for demandId
   const [openModalUnidade, setOpenModalUnidade] = useState(false);
   const [unidade, setUnidade] = useState<{
     nome: string;
@@ -746,6 +746,10 @@ const Sistema: React.FC = () => {
 
   const setChildrenMenu = (id: string) => {
     setChave(id);
+  };
+
+  const handleDemandIdChange = (id: string) => {
+    setDemandId(id);
   };
 
   return (
@@ -968,8 +972,13 @@ const Sistema: React.FC = () => {
                   {
                     {
                       '1': <Dashboard />,
-                      '4': <Board setChave={setChildrenMenu} />,
-                      '5': <Stage />,
+                      '4': (
+                        <Board
+                          setChave={setChildrenMenu}
+                          onDemandIdChange={handleDemandIdChange}
+                        />
+                      ), // Pass handleDemandIdChange as prop/>,
+                      '5': <Stage demandId={demandId} />,
                     }[chave]
                   }
                 </>

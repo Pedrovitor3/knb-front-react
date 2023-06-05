@@ -37,7 +37,7 @@ export const getConfig = (type: string) => {
       'Access-Control-Allow-Methods': 'POST, GET, PUT, OPTION',
       'Content-Type': 'application/json;charset=UTF-8',
       // eslint-disable-next-line prettier/prettier
-      'Autorization': `Bearer ${localStorage.getItem('token_sso')}`,
+      'Authorization': `Bearer ${localStorage.getItem('token_sso')}`,
       // eslint-disable-next-line prettier/prettier
       'token_sso': localStorage.getItem('token_sso'),
     },

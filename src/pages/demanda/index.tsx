@@ -19,8 +19,13 @@ interface StageProps {
   cards: CardProps[];
 }
 
-const Stage = () => {
+type Props = {
+  demandId: string;
+};
+
+const Stage = ({ demandId }: Props) => {
   const [stages, setStages] = useState<StageProps[]>([]);
+  console.log('a', demandId);
 
   useEffect(() => {
     loadingStages();

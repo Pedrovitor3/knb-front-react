@@ -21,13 +21,15 @@ interface PhaseProps {
 
 type Props = {
   setChave: (id: string) => void;
+  onDemandIdChange: (id: string) => void;
 };
 
-const Board = ({ setChave }: Props) => {
+const Board = ({ setChave, onDemandIdChange }: Props) => {
   const [phases, setPhases] = useState<PhaseProps[]>([]);
   const [demands, setDemands] = useState<DemandProps[]>([]);
   const [recordDemand, setRecordDemand] = useState<DemandProps | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [demandId, setDemandId] = useState<string | null>(null); // New state for demandId
 
   useEffect(() => {
     loadingPhase();
@@ -105,6 +107,11 @@ const Board = ({ setChave }: Props) => {
     );
   };
 
+  const handleDemandClick = (demandId: string) => {
+    setChave('5');
+    onDemandIdChange(demandId); // Chamada da função onDemandIdChange para atualizar o valor de demandId
+  };
+
   return (
     <>
       <div>
@@ -132,6 +139,7 @@ const Board = ({ setChave }: Props) => {
                       <Button
                         onClick={() => {
                           setChave('5');
+                          handleDemandClick(demand.id);
                         }}
                       >
                         <h3 className="demand-title">{demand.name}</h3>
@@ -144,7 +152,6 @@ const Board = ({ setChave }: Props) => {
             </div>
           ))}
 
-          {/* Modal */}
           {recordDemand && (
             <ModalBoard
               id={recordDemand.id}
@@ -157,5 +164,4 @@ const Board = ({ setChave }: Props) => {
     </>
   );
 };
-
 export default Board;
