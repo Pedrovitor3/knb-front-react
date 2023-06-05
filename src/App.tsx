@@ -4,6 +4,7 @@ import { ConfigProvider } from 'antd';
 import ptBR from 'antd/lib/locale/pt_BR';
 import { AuthProvider } from './contexts/auth/AuthProvider';
 import MyRoutes from './components/MyRoutes';
+import { ItemType } from 'antd/es/menu/hooks/useItems';
 
 function App() {
   return (

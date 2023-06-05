@@ -31,7 +31,7 @@ const ModalBoard = ({ id, openModal, closeModal }: Props) => {
       .catch(errorInfo => message.error('Erro no preenchimento dos campos.'));
   };
 
-  //Listagem, se tiver id set no formulário
+  // Listagem, se tiver id set no formulário
   useEffect(() => {
     loadingDemand();
   }, [id]);
@@ -51,13 +51,13 @@ const ModalBoard = ({ id, openModal, closeModal }: Props) => {
     }
   }
 
-  //ATUALIZAÇÃO DE TREINAMENTOS************
+  // ATUALIZAÇÃO DE DEMANDAS
   const submitUpdate = async () => {
     const editingDemand = form.getFieldsValue(true);
     await updateDemand(editingDemand, id);
   };
 
-  // CRIAÇÃO DE TREINAMENTOS
+  // CRIAÇÃO DE DEMANDAS
   const submitCreate = async () => {
     const editingDemand = form.getFieldsValue(true);
     await postDemand(editingDemand);
@@ -66,7 +66,7 @@ const ModalBoard = ({ id, openModal, closeModal }: Props) => {
   return (
     <>
       <Modal
-        open={openModal}
+        visible={openModal}
         title="Demandas"
         okText="Salvar"
         onCancel={() => {
@@ -78,7 +78,7 @@ const ModalBoard = ({ id, openModal, closeModal }: Props) => {
         <Form layout="vertical" form={form}>
           <Col offset={1} span={16}>
             <Form.Item
-              name={['name']}
+              name="name"
               label="Nome"
               rules={[
                 {
@@ -96,4 +96,5 @@ const ModalBoard = ({ id, openModal, closeModal }: Props) => {
     </>
   );
 };
+
 export default ModalBoard;

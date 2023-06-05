@@ -578,7 +578,6 @@ import {
   Modal,
   List,
   Drawer,
-  Divider,
 } from 'antd';
 import React, { useEffect, useState } from 'react';
 import Dashboard from '../dashboard';
@@ -619,6 +618,7 @@ const Sistema: React.FC = () => {
     token: { colorBgContainer },
   } = theme.useToken();
   const [unidades, setUnidades] = useState([{ nome: '', codigo: 0 }]);
+  const [demandId, setDemandId] = useState<string | null>(null);
   const [openModalUnidade, setOpenModalUnidade] = useState(false);
   const [unidade, setUnidade] = useState<{
     nome: string;
@@ -636,6 +636,8 @@ const Sistema: React.FC = () => {
     }*/
     setChave(item.key);
   };
+
+  console.log('item', itemsMenu);
 
   const MontaMenu = () => {
     const items: MenuItem[] = [];
@@ -741,6 +743,10 @@ const Sistema: React.FC = () => {
       navitate("/dashboard");
     }*/
   }, [auth]);
+
+  const setChildrenMenu = (id: string) => {
+    setChave(id);
+  };
 
   return (
     <ConfigProvider locale={ptBR}>
@@ -947,9 +953,8 @@ const Sistema: React.FC = () => {
                     '1': <span>Dashboard</span>,
                     '2': <span>Teste</span>,
                     '3': <span>Teste / Teste children</span>,
-                    '4': <span>Objetos</span>,
-                    '5': <span>Naturezas</span>,
-                    '6': <span>Modelos</span>,
+                    '4': <span>Demandas</span>,
+                    '5': <span>Cartões</span>,
                   }[chave]
                 }
               </Breadcrumb.Item>
@@ -963,9 +968,8 @@ const Sistema: React.FC = () => {
                   {
                     {
                       '1': <Dashboard />,
-                      '5': <Dashboard />,
-                      '6': <Board />,
-                      '7': <Stage />,
+                      '4': <Board setChave={setChildrenMenu} />,
+                      '5': <Stage />,
                     }[chave]
                   }
                 </>

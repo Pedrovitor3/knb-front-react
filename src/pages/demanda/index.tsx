@@ -1,6 +1,6 @@
+'use client';
 import React, { useEffect, useState } from 'react';
 import { message } from 'antd';
-import { useParams } from 'react-router-dom';
 import { getStage } from '../../services/axios/stageService';
 
 require('./index.css');
@@ -17,11 +17,9 @@ interface StageProps {
     id: string;
   } | null;
   cards: CardProps[];
-  demandId: string;
 }
 
-const Stage: React.FC = () => {
-  const { demandId } = useParams<{ demandId: string }>();
+const Stage = () => {
   const [stages, setStages] = useState<StageProps[]>([]);
 
   useEffect(() => {
@@ -33,7 +31,7 @@ const Stage: React.FC = () => {
 
     if (response !== false) {
       const filteredStages = response.data.filter((stage: StageProps) => {
-        return stage.demand && stage.demand.id === demandId;
+        return stage.demand && stage.demand.id === demandId; //erro
       });
       setStages(filteredStages);
     } else {

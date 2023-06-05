@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { getPhase } from '../../services/axios/phaseService';
-import { message, Dropdown, Space, MenuProps, Button, Row } from 'antd';
-import { Link } from 'react-router-dom';
+import { message, Dropdown, Space, MenuProps, Button } from 'antd';
 import { MoreOutlined } from '@ant-design/icons';
 import ModalBoard from '../../components/ModalBoard';
-
-import './index.css';
 import Popconfirm from 'antd/lib/popconfirm';
 import { deleteDemand } from '../../services/axios/demandService';
+
+import './index.css';
 
 interface DemandProps {
   id: string;
@@ -20,7 +19,11 @@ interface PhaseProps {
   demands: DemandProps[];
 }
 
-const Board: React.FC = () => {
+type Props = {
+  setChave: (id: string) => void;
+};
+
+const Board = ({ setChave }: Props) => {
   const [phases, setPhases] = useState<PhaseProps[]>([]);
   const [demands, setDemands] = useState<DemandProps[]>([]);
   const [recordDemand, setRecordDemand] = useState<DemandProps | null>(null);
@@ -102,8 +105,6 @@ const Board: React.FC = () => {
     );
   };
 
-  console.log(recordDemand);
-
   return (
     <>
       <div>
@@ -128,9 +129,13 @@ const Board: React.FC = () => {
                 {phase.demands.map(demand => (
                   <div className="demand" key={demand.id}>
                     <Space>
-                      <Link to={`/stage/${demand.id}`}>
+                      <Button
+                        onClick={() => {
+                          setChave('5');
+                        }}
+                      >
                         <h3 className="demand-title">{demand.name}</h3>
-                      </Link>
+                      </Button>
                       <span className="icon-wrapper">{renderMenu(demand)}</span>
                     </Space>
                   </div>
