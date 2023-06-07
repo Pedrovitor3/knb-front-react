@@ -4,9 +4,14 @@
   justify-content: space-between;
 }
 
+/* Botões */
 .botao {
   margin: 0 15px 25px;
 }
+.botao-card{
+  border: transparent;
+}
+
 .title {
   display: flex;
   align-items: center;

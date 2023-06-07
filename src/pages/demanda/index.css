@@ -4,6 +4,16 @@
   justify-content: space-around;
 }
 
+
+
+/* Botões */
+.botao {
+  margin: 0 15px 25px;
+}
+.botao-card{
+  border: transparent;
+}
+
 /* Estilos para as fases */
 .stage {
   flex: 1;
@@ -44,4 +54,28 @@
   font-size: 16px;
   margin-bottom: 5px;
   color: black;
+}
+
+
+/* Estilos para ícones */
+.icon-wrapper {
+  visibility: hidden;
+  top: 50%;
+  right: 10px;
+  transform: translate(50%, -50%);
+  position: absolute;
+}
+
+.card:hover .icon-wrapper {
+  visibility: visible;
+}
+
+.modal-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-board .ant-modal-content {
+  width: 600px;
 }

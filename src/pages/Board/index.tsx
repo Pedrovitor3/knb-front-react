@@ -4,13 +4,14 @@ import { message, Dropdown, Space, MenuProps, Button } from 'antd';
 import { MoreOutlined } from '@ant-design/icons';
 import ModalBoard from '../../components/ModalBoard';
 import Popconfirm from 'antd/lib/popconfirm';
-import { deleteDemand } from '../../services/axios/demandService';
+import { deleteDemand, getDemand } from '../../services/axios/demandService';
 
 import './index.css';
 
 interface DemandProps {
   id: string;
   name: string;
+  phaseId?: string; // Adicionar phaseId como propriedade opcional
 }
 
 interface PhaseProps {
@@ -27,11 +28,12 @@ type Props = {
 const Board = ({ setChave, onDemandIdChange }: Props) => {
   const [phases, setPhases] = useState<PhaseProps[]>([]);
   const [demands, setDemands] = useState<DemandProps[]>([]);
-  const [recordDemand, setRecordDemand] = useState<DemandProps | null>(null);
+  const [recordDemand, setRecordDemand] = useState<any>({});
   const [showModal, setShowModal] = useState(false);
-  const [demandId, setDemandId] = useState<string | null>(null); // New state for demandId
 
   useEffect(() => {
+    setShowModal(false);
+    loadingPhase();
     loadingPhase();
   }, []);
 
@@ -41,11 +43,10 @@ const Board = ({ setChave, onDemandIdChange }: Props) => {
 
   async function loadingPhase() {
     const response = await getPhase('phase');
-
     if (response !== false) {
       setPhases(response.data);
     } else {
-      message.error('Ocorreu um erro inesperado ao obter as demandas.');
+      message.error('Ocorreu um erro inesperado ao obter as phases.');
     }
   }
 
@@ -118,7 +119,6 @@ const Board = ({ setChave, onDemandIdChange }: Props) => {
         <Button
           className="botao"
           type="primary"
-          htmlType="submit"
           onClick={() => {
             setShowModal(true);
           }}
@@ -137,6 +137,7 @@ const Board = ({ setChave, onDemandIdChange }: Props) => {
                   <div className="demand" key={demand.id}>
                     <Space>
                       <Button
+                        className="botao-card"
                         onClick={() => {
                           setChave('5');
                           handleDemandClick(demand.id);
@@ -144,7 +145,9 @@ const Board = ({ setChave, onDemandIdChange }: Props) => {
                       >
                         <h3 className="demand-title">{demand.name}</h3>
                       </Button>
-                      <span className="icon-wrapper">{renderMenu(demand)}</span>
+                      <span className="icon-wrapper">
+                        {renderMenu({ ...demand, phaseId: phase.id })}
+                      </span>
                     </Space>
                   </div>
                 ))}
@@ -154,7 +157,8 @@ const Board = ({ setChave, onDemandIdChange }: Props) => {
 
           {recordDemand && (
             <ModalBoard
-              id={recordDemand.id}
+              id={recordDemand?.id}
+              phaseId={recordDemand.phaseId}
               openModal={showModal}
               closeModal={hideModal}
             />
@@ -164,4 +168,5 @@ const Board = ({ setChave, onDemandIdChange }: Props) => {
     </>
   );
 };
+
 export default Board;
