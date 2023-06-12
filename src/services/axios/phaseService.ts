@@ -1,4 +1,4 @@
-import { APIPhase } from './baseService/baseService';
+import { APIPhase, APIStage } from './baseService/baseService';
 import { message } from 'antd';
 
 interface Phase {
@@ -7,7 +7,7 @@ interface Phase {
 
 export async function getPhase(url: any) {
   try {
-    const response = await APIPhase.get(url);
+    const response = await APIStage.get(url);
     return response;
   } catch (error) {
     if (error === 500) {
@@ -40,25 +40,23 @@ export async function postPhase(phase: Phase) {
     );
   }
 }
-
-export async function updatePhase(url: any, id: string) {
+export const updatePhase = async (phase: Phase, id: any) => {
   try {
-    const response = await APIPhase.put(`url/${id}`);
-    return response;
+    await APIPhase.put(`demand/${id}`, phase);
+    message.success('cadastrado com sucesso');
   } catch (error) {
     if (error === 500) {
       message.info('O tempo da sua sessão expirou, faça o login novamente');
     } else if (error !== 401) {
       message.error(
-        'Não foi possível carregar o recurso, tente novamente mais tarde.',
+        'Não foi possível obter a lista de eixos, tente novamente mais tarde.',
       );
     }
     console.error(
-      `An unexpected error occurred while retrieving the resource list.${error}`,
+      `An unexpected error occurred while retrieving the axle list.${error}`,
     );
   }
-  return false;
-}
+};
 
 export async function deletePhase(id: any) {
   try {

@@ -4,12 +4,14 @@ import { Button, Dropdown, MenuProps, Popconfirm, Space, message } from 'antd';
 import { getStage } from '../../services/axios/stageService';
 import { MoreOutlined } from '@ant-design/icons';
 import { deleteCard } from '../../services/axios/cardService';
+import ModalCard from '../../components/ModalDemand';
 
 require('./index.css');
 
 interface CardProps {
   id: string;
   name: string;
+  stageId?: string;
 }
 
 interface StageProps {
@@ -32,12 +34,17 @@ const Stage = ({ demandId }: Props) => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
+    setShowModal(false);
     loadingStages();
   }, []);
 
+  useEffect(() => {
+    loadingStages();
+  }, [stages]);
+
+  //Listando todos as fases daquela demanda
   async function loadingStages() {
     const response = await getStage('stage');
-
     if (response !== false) {
       const filteredStages = response.data.filter((stage: StageProps) => {
         return stage.demand && stage.demand.id === demandId; //erro
@@ -47,6 +54,12 @@ const Stage = ({ demandId }: Props) => {
       message.error('Ocorreu um erro inesperado ao obter as etapas.');
     }
   }
+
+  const hideModal = (refresh: boolean) => {
+    setShowModal(false);
+    setRecordCard(null);
+    if (refresh) setCards([]);
+  };
 
   const ClickDeleteCard = async (record: CardProps) => {
     await deleteCard(record.id);
@@ -103,21 +116,33 @@ const Stage = ({ demandId }: Props) => {
   return (
     <>
       <div>
-        <Button className="botao">Criar novo card</Button>
+        <Button
+          className="botao"
+          type="primary"
+          onClick={() => {
+            setShowModal(true);
+          }}
+        >
+          Criar novo card
+        </Button>
         <div className="body">
           {stages.length > 0 ? (
-            stages.map((stage: StageProps) => (
+            stages.map(stage => (
               <div className="stage" key={stage.id}>
-                <h2 className="stage-title">{stage.name}</h2>
+                <div className="title">
+                  <h2 className="stage-title">{stage.name}</h2>
+                </div>
 
-                <div className="stage-cards">
-                  {stage.cards.map((card: CardProps) => (
+                <div className="card-list">
+                  {stage.cards.map(card => (
                     <div className="card" key={card.id}>
                       <Space>
                         <Button className="botao-card">
-                          <h3 className="demand-title">{card.name}</h3>
+                          <h3 className="card-title">{card.name}</h3>
                         </Button>
-                        <span className="icon-wrapper">{renderMenu(card)}</span>
+                        <span className="icon-wrapper">
+                          {renderMenu({ ...card, stageId: stage.id })}
+                        </span>
                       </Space>
                     </div>
                   ))}
@@ -125,7 +150,16 @@ const Stage = ({ demandId }: Props) => {
               </div>
             ))
           ) : (
-            <div>Loading stages...</div>
+            <div>Você não tem nenhuma lista, comece a criar</div>
+          )}
+
+          {recordCard && (
+            <ModalCard
+              id={recordCard?.id}
+              stageId={recordCard.stageId}
+              openModal={showModal}
+              closeModal={hideModal}
+            />
           )}
         </div>
       </div>

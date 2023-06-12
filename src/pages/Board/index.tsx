@@ -4,7 +4,7 @@ import { message, Dropdown, Space, MenuProps, Button } from 'antd';
 import { MoreOutlined } from '@ant-design/icons';
 import ModalBoard from '../../components/ModalBoard';
 import Popconfirm from 'antd/lib/popconfirm';
-import { deleteDemand, getDemand } from '../../services/axios/demandService';
+import { deleteDemand } from '../../services/axios/demandService';
 
 import './index.css';
 
@@ -33,7 +33,6 @@ const Board = ({ setChave, onDemandIdChange }: Props) => {
 
   useEffect(() => {
     setShowModal(false);
-    loadingPhase();
     loadingPhase();
   }, []);
 
