@@ -25,10 +25,6 @@ export const APIProfile = axios.create({
   baseURL: urlsServices.BACKENDWS,
 });
 
-export const APIPhase = axios.create({
-  baseURL: urlsServices.BACKENDWS,
-});
-
 export const APIStage = axios.create({
   baseURL: urlsServices.BACKENDWS,
 });

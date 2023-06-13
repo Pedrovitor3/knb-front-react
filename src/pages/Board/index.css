@@ -1,56 +1,67 @@
-/* Estilos para a página Trello */
+/* index.css */
+
 .body {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  padding: 20px;
+  font-family: "Helvetica Neue", Arial, sans-serif;
 }
 
-/* Botões */
-.botao {
-  margin: 0 15px 25px;
-}
-.botao-card{
-  border: transparent;
+.column {
+  width: 250px;
+  height: 120%;
+  padding: 10px;
+  background-color: #ebecf0;
+  border-radius: 4px;
+  margin-right: 20px;
 }
 
-.title {
+.column h2 {
+  text-align: center;
+  /* font-weight: 750 */
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.demand-list {
+  display: flex;
+}
+
+.demand {
   display: flex;
   align-items: center;
-  justify-content: space-around;
-}
-
-/* Estilos para as fases */
-.phase {
-  flex: 1;
-  margin: 0px 10px;
   padding: 10px;
-  background-color: #f4f4f4;
-  border-radius: 6px;
-  height: 450px;
-}
-
-.phase-title {
-  font-size: 22px;
-  text-align: center;
-  margin-bottom: 25px;
-  color: rgba(17, 16, 16, 0.918);
-}
-
-/* Estilos para as demandas */
-.demand {
-  padding: 10px;
-  margin-bottom: 10px !important;
   background-color: #fff;
   border-radius: 4px;
+  margin-bottom: 10px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   position: relative;
 }
 
-.demand-title {
-  font-size: 16px;
-  margin-bottom: 5px;
-  color: black;
+.botao-card {
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  font-size: 14px;
+  color: #1890ff;
 }
 
+.demand-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #000;
+}
+
+.icon-wrapper {
+  margin-left: auto;
+}
+
+
+
+.botao {
+  margin-bottom: 20px;
+}
 
 /* Estilos para ícones */
 .icon-wrapper {
@@ -65,12 +76,35 @@
   visibility: visible;
 }
 
-.modal-board {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.modal-content {
+  width: 400px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.modal-board .ant-modal-content {
-  width: 600px;
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }
+
+.modal-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.modal-footer button {
+  margin-left: 10px;
+}
+
+/* Add any additional CSS styles as needed */

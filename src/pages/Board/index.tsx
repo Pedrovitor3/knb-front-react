@@ -1,23 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { getPhase } from '../../services/axios/phaseService';
-import { message, Dropdown, Space, MenuProps, Button } from 'antd';
-import { MoreOutlined } from '@ant-design/icons';
+import { message, Dropdown, Space, Button, Popconfirm } from 'antd';
 import ModalBoard from '../../components/ModalBoard';
-import Popconfirm from 'antd/lib/popconfirm';
-import { deleteDemand } from '../../services/axios/demandService';
-
+import { deleteDemand, getDemand } from '../../services/axios/demandService';
 import './index.css';
+import { MoreOutlined } from '@ant-design/icons';
 
 interface DemandProps {
   id: string;
   name: string;
-  phaseId?: string; // Adicionar phaseId como propriedade opcional
-}
-
-interface PhaseProps {
-  id: string;
-  name: string;
-  demands: DemandProps[];
+  status: string;
 }
 
 type Props = {
@@ -26,26 +17,34 @@ type Props = {
 };
 
 const Board = ({ setChave, onDemandIdChange }: Props) => {
-  const [phases, setPhases] = useState<PhaseProps[]>([]);
   const [demands, setDemands] = useState<DemandProps[]>([]);
-  const [recordDemand, setRecordDemand] = useState<any>({});
+  const [recordDemand, setRecordDemand] = useState<DemandProps | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [columns, setColumns] = useState<
+    { status: string; demands: DemandProps[] }[]
+  >([
+    { status: 'aguardando', demands: [] },
+    { status: 'executando', demands: [] },
+    { status: 'concluido', demands: [] },
+    { status: 'pendente', demands: [] },
+    { status: 'recusado', demands: [] },
+  ]);
 
   useEffect(() => {
     setShowModal(false);
-    loadingPhase();
+    loadingDemands();
   }, []);
 
   useEffect(() => {
-    loadingPhase();
-  }, [phases]);
+    loadingDemands();
+  }, [demands]);
 
-  async function loadingPhase() {
-    const response = await getPhase('phase');
+  async function loadingDemands() {
+    const response = await getDemand('demand');
     if (response !== false) {
-      setPhases(response.data);
+      setDemands(response.data);
     } else {
-      message.error('Ocorreu um erro inesperado ao obter as phases.');
+      message.error('Ocorreu um erro inesperado ao obter as demandas.');
     }
   }
 
@@ -55,14 +54,13 @@ const Board = ({ setChave, onDemandIdChange }: Props) => {
     if (refresh) setDemands([]);
   };
 
-  const ClickDeleteDemand = async (record: DemandProps) => {
+  const clickDeleteDemand = async (record: DemandProps) => {
     await deleteDemand(record.id);
     const newDemands = demands.filter(demand => demand.id !== record.id);
     setDemands(newDemands);
-    loadingPhase();
   };
 
-  const handleMenuClick: MenuProps['onClick'] = e => {
+  const handleMenuClick = (e: any) => {
     if (e.key === '1') {
       setShowModal(true);
     }
@@ -85,7 +83,7 @@ const Board = ({ setChave, onDemandIdChange }: Props) => {
                 label: (
                   <Popconfirm
                     title="Tem certeza de que deseja desabilitar este registro de demanda?"
-                    onConfirm={() => ClickDeleteDemand(record)}
+                    onConfirm={() => clickDeleteDemand(record)}
                   >
                     Excluir
                   </Popconfirm>
@@ -109,62 +107,61 @@ const Board = ({ setChave, onDemandIdChange }: Props) => {
 
   const handleDemandClick = (demandId: string) => {
     setChave('5');
-    onDemandIdChange(demandId); // Chamada da função onDemandIdChange para atualizar o valor de demandId
+    onDemandIdChange(demandId);
   };
 
-  return (
-    <>
-      <div>
-        <Button
-          className="botao"
-          type="primary"
-          onClick={() => {
-            setShowModal(true);
-          }}
-        >
-          Criar nova demanda
-        </Button>
-        <div className="body">
-          {phases.map(phase => (
-            <div className="phase" key={phase.id}>
-              <div className="title">
-                <h2 className="phase-title">{phase.name}</h2>
-              </div>
+  // Update columns and position the demands within the respective column
+  useEffect(() => {
+    const updatedColumns = columns.map(column => ({
+      ...column,
+      demands: demands.filter(demand => demand.status === column.status),
+    }));
+    setColumns(updatedColumns);
+  }, [demands]);
 
-              <div className="demand-list">
-                {phase.demands.map(demand => (
-                  <div className="demand" key={demand.id}>
-                    <Space>
-                      <Button
-                        className="botao-card"
-                        onClick={() => {
-                          setChave('5');
-                          handleDemandClick(demand.id);
-                        }}
-                      >
-                        <h3 className="demand-title">{demand.name}</h3>
-                      </Button>
-                      <span className="icon-wrapper">
-                        {renderMenu({ ...demand, phaseId: phase.id })}
-                      </span>
-                    </Space>
-                  </div>
-                ))}
-              </div>
+  return (
+    <div>
+      <Button
+        className="botao"
+        type="primary"
+        onClick={() => {
+          setShowModal(true);
+        }}
+      >
+        Criar nova demanda
+      </Button>
+      <div className="body">
+        <div className="demand-list">
+          {columns.map(column => (
+            <div className="column" key={column.status}>
+              <h2>{column.status}</h2>
+              {column.demands.map(demand => (
+                <div className="demand" key={demand.id}>
+                  <Space>
+                    <Button
+                      className="botao-card"
+                      onClick={() => {
+                        setChave('5');
+                        handleDemandClick(demand.id);
+                      }}
+                    >
+                      <h3 className="demand-title">{demand.name}</h3>
+                    </Button>
+                    <span className="icon-wrapper">{renderMenu(demand)}</span>
+                  </Space>
+                </div>
+              ))}
             </div>
           ))}
-
-          {recordDemand && (
-            <ModalBoard
-              id={recordDemand?.id}
-              phaseId={recordDemand.phaseId}
-              openModal={showModal}
-              closeModal={hideModal}
-            />
-          )}
         </div>
       </div>
-    </>
+
+      <ModalBoard
+        id={recordDemand?.id}
+        closeModal={hideModal}
+        openModal={showModal}
+      />
+    </div>
   );
 };
 

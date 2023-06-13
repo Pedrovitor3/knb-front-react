@@ -4,7 +4,8 @@ import { Button, Dropdown, MenuProps, Popconfirm, Space, message } from 'antd';
 import { getStage } from '../../services/axios/stageService';
 import { MoreOutlined } from '@ant-design/icons';
 import { deleteCard } from '../../services/axios/cardService';
-import ModalCard from '../../components/ModalDemand';
+import ModalDemand from '../../components/ModalDemand';
+import ModalCard from '../../components/ModalCard';
 
 require('./index.css');
 
@@ -32,9 +33,11 @@ const Stage = ({ demandId }: Props) => {
   const [cards, setCards] = useState<CardProps[]>([]);
   const [recordCard, setRecordCard] = useState<any>({});
   const [showModal, setShowModal] = useState(false);
+  const [showCardModal, setShowCardModal] = useState(false);
 
   useEffect(() => {
     setShowModal(false);
+    setShowCardModal(false);
     loadingStages();
   }, []);
 
@@ -57,6 +60,7 @@ const Stage = ({ demandId }: Props) => {
 
   const hideModal = (refresh: boolean) => {
     setShowModal(false);
+    setShowCardModal(false);
     setRecordCard(null);
     if (refresh) setCards([]);
   };
@@ -72,6 +76,10 @@ const Stage = ({ demandId }: Props) => {
     if (e.key === '1') {
       setShowModal(true);
     }
+  };
+
+  const handleOpenCard = (cardId: string) => {
+    setShowCardModal(true); // Altere o estado para abrir o modal 'use client'
   };
 
   const renderMenu = (record: CardProps) => {
@@ -137,7 +145,10 @@ const Stage = ({ demandId }: Props) => {
                   {stage.cards.map(card => (
                     <div className="card" key={card.id}>
                       <Space>
-                        <Button className="botao-card">
+                        <Button
+                          onClick={() => handleOpenCard(card.id)} // Altere para uma função de callback para evitar a chamada imediata da função
+                          className="botao-card"
+                        >
                           <h3 className="card-title">{card.name}</h3>
                         </Button>
                         <span className="icon-wrapper">
@@ -154,11 +165,19 @@ const Stage = ({ demandId }: Props) => {
           )}
 
           {recordCard && (
-            <ModalCard
+            <ModalDemand
               id={recordCard?.id}
               stageId={recordCard.stageId}
               openModal={showModal}
               closeModal={hideModal}
+            />
+          )}
+          {/*estou mandnando id de card duas vezes */}
+          {showCardModal && (
+            <ModalCard
+              cardId={recordCard?.id}
+              closeModal={hideModal}
+              openModal={showCardModal}
             />
           )}
         </div>

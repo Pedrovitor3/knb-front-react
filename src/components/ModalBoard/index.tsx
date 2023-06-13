@@ -1,24 +1,19 @@
-import { Modal, Form, Input, Col, message, Select } from 'antd';
-import { useEffect, useState } from 'react';
+import { Modal, Form, Input, Col, message } from 'antd';
+import { useEffect } from 'react';
 import {
   getDemand,
   postDemand,
   updateDemand,
 } from '../../services/axios/demandService';
-import { getPhase } from '../../services/axios/phaseService';
 
 type Props = {
-  id: string;
-  phaseId: string;
+  id?: string;
   openModal: boolean;
   closeModal: (refresh: boolean) => void;
 };
 
-const ModalBoard = ({ id, phaseId, openModal, closeModal }: Props) => {
+const ModalBoard = ({ id, openModal, closeModal }: Props) => {
   const [form] = Form.useForm();
-  const { Option } = Select;
-  const [phases, setPhases] = useState<{ id: string; name: string }[]>([]);
-  const [selectedPhaseId, setSelectedPhaseId] = useState<string>('');
 
   const handleOk = (e: any) => {
     e.preventDefault();
@@ -41,11 +36,6 @@ const ModalBoard = ({ id, phaseId, openModal, closeModal }: Props) => {
   }, [id]);
 
   useEffect(() => {
-    loadingPhase();
-  }, [phaseId]);
-
-  useEffect(() => {
-    loadingPhases();
     loadingDemand();
   }, []);
 
@@ -57,6 +47,7 @@ const ModalBoard = ({ id, phaseId, openModal, closeModal }: Props) => {
             id: response.data.id,
             name: response.data.name,
             description: response.data.description,
+            status: response.data.status,
           });
         } else {
           message.error('Ocorreu um erro inesperado ao obter as demandas.');
@@ -64,35 +55,6 @@ const ModalBoard = ({ id, phaseId, openModal, closeModal }: Props) => {
       });
     }
   }
-
-  async function loadingPhase() {
-    if (id) {
-      await getPhase(`phase/${phaseId}`).then(response => {
-        if (response !== false) {
-          form.setFieldsValue({
-            id: response.data.id,
-            phaseName: response.data.name,
-          });
-        } else {
-          message.error('Ocorreu um erro inesperado ao obter as demandas.');
-        }
-      });
-    }
-  }
-
-  async function loadingPhases() {
-    await getPhase(`phase`).then(response => {
-      if (response !== false) {
-        setPhases(response.data);
-      } else {
-        message.error('Ocorreu um erro inesperado ao obter as fases.');
-      }
-    });
-  }
-
-  const handleChangePhase = (id: string) => {
-    setSelectedPhaseId(id);
-  };
 
   const submitUpdate = async () => {
     const editingDemand = form.getFieldsValue(true);
@@ -149,8 +111,8 @@ const ModalBoard = ({ id, phaseId, openModal, closeModal }: Props) => {
           </Col>
           <Col offset={1} span={16}>
             <Form.Item
-              name="phaseName"
-              label="Fase"
+              name="status"
+              label="Status"
               rules={[
                 {
                   required: true,
@@ -159,13 +121,7 @@ const ModalBoard = ({ id, phaseId, openModal, closeModal }: Props) => {
               ]}
               hasFeedback
             >
-              <Select value={selectedPhaseId} onChange={handleChangePhase}>
-                {phases.map(phase => (
-                  <Option key={phase.id} value={phase.id}>
-                    {phase.name}
-                  </Option>
-                ))}
-              </Select>
+              <Input />
             </Form.Item>
           </Col>
         </Form>

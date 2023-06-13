@@ -1,32 +1,31 @@
 import { Modal, Form, Input, Col, message, Select } from 'antd';
 import { useEffect, useState } from 'react';
-
 import {
-  getCard,
-  postCard,
-  updateCard,
-} from '../../services/axios/cardService';
-import { getStage } from '../../services/axios/stageService';
+  getDemand,
+  postDemand,
+  updateDemand,
+} from '../../services/axios/demandService';
 
 type Props = {
-  id: string;
-  stageId: string;
+  cardId: string;
   openModal: boolean;
   closeModal: (refresh: boolean) => void;
 };
 
-const ModalDemand = ({ id, stageId, openModal, closeModal }: Props) => {
+const ModalCard = ({ cardId, openModal, closeModal }: Props) => {
   const [form] = Form.useForm();
   const { Option } = Select;
-  const [stages, setStages] = useState<{ id: string; name: string }[]>([]);
-  const [selectedStageId, setSelectedStageId] = useState<string>('');
+  const [phases, setPhases] = useState<{ id: string; name: string }[]>([]);
+  const [selectedPhaseId, setSelectedPhaseId] = useState<string>('');
+
+  console.log(cardId);
 
   const handleOk = (e: any) => {
     e.preventDefault();
     form
       .validateFields()
       .then(() => {
-        if (id) {
+        if (cardId) {
           submitUpdate();
         } else {
           submitCreate();
@@ -38,21 +37,12 @@ const ModalDemand = ({ id, stageId, openModal, closeModal }: Props) => {
   };
 
   useEffect(() => {
-    loadingCard();
-  }, [id]);
+    loadingDemand();
+  }, [cardId]);
 
-  useEffect(() => {
-    loadingStage();
-  }, [stageId]);
-
-  useEffect(() => {
-    loadingCard();
-    loadingStages();
-  }, []);
-
-  async function loadingCard() {
-    if (id) {
-      await getCard(`card/${id}`).then(response => {
+  async function loadingDemand() {
+    if (cardId) {
+      await getDemand(`card/${cardId}`).then(response => {
         if (response !== false) {
           form.setFieldsValue({
             id: response.data.id,
@@ -66,50 +56,25 @@ const ModalDemand = ({ id, stageId, openModal, closeModal }: Props) => {
     }
   }
 
-  async function loadingStage() {
-    if (id) {
-      await getStage(`stage/${stageId}`).then(response => {
-        if (response !== false) {
-          form.setFieldsValue({
-            stageId: response.data.id,
-            stageName: response.data.name,
-          });
-        } else {
-          message.error('Ocorreu um erro inesperado ao obter as demandas.');
-        }
-      });
-    }
-  }
-
-  async function loadingStages() {
-    await getStage(`stage`).then(response => {
-      if (response !== false) {
-        setStages(response.data);
-      } else {
-        message.error('Ocorreu um erro inesperado ao obter as demandas.');
-      }
-    });
-  }
-
-  const handleChangeStage = (id: string) => {
-    setSelectedStageId(id);
+  const handleChangePhase = (cardId: string) => {
+    setSelectedPhaseId(cardId);
   };
 
   const submitUpdate = async () => {
     const editingDemand = form.getFieldsValue(true);
-    await updateCard(editingDemand, id);
+    await updateDemand(editingDemand, cardId);
   };
 
   const submitCreate = async () => {
     const editingDemand = form.getFieldsValue(true);
-    await postCard(editingDemand);
+    await postDemand(editingDemand);
   };
 
   return (
     <>
       <Modal
         visible={openModal}
-        title="Cartão"
+        title="Demanda"
         okText="Salvar"
         onCancel={() => {
           form.resetFields();
@@ -140,7 +105,7 @@ const ModalDemand = ({ id, stageId, openModal, closeModal }: Props) => {
               rules={[
                 {
                   required: true,
-                  message: 'Por favor, insira a descrição do cartão',
+                  message: 'Por favor, insira a descrição da demanda',
                 },
               ]}
               hasFeedback
@@ -148,11 +113,10 @@ const ModalDemand = ({ id, stageId, openModal, closeModal }: Props) => {
               <Input />
             </Form.Item>
           </Col>
-
           <Col offset={1} span={16}>
             <Form.Item
-              name="stageName"
-              label="Etapa"
+              name="phaseName"
+              label="Fase"
               rules={[
                 {
                   required: true,
@@ -161,10 +125,10 @@ const ModalDemand = ({ id, stageId, openModal, closeModal }: Props) => {
               ]}
               hasFeedback
             >
-              <Select value={selectedStageId} onChange={handleChangeStage}>
-                {stages.map(stage => (
-                  <Option key={stage.id} value={stage.id}>
-                    {stage.name}
+              <Select value={selectedPhaseId} onChange={handleChangePhase}>
+                {phases.map(phase => (
+                  <Option key={phase.id} value={phase.id}>
+                    {phase.name}
                   </Option>
                 ))}
               </Select>
@@ -176,4 +140,4 @@ const ModalDemand = ({ id, stageId, openModal, closeModal }: Props) => {
   );
 };
 
-export default ModalDemand;
+export default ModalCard;
