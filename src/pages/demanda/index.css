@@ -2,6 +2,8 @@
 .body {
   display: flex;
   justify-content: space-around;
+  padding: 20px;
+  font-family: "Helvetica Neue", Arial, sans-serif;
 }
 
 /* Botões */
@@ -27,14 +29,24 @@
   padding: 10px;
   background-color: #f4f4f4;
   border-radius: 6px;
-  height: 4500px;
+  height: 450px;
 }
+
 
 .stage-title{
   font-size: 22px;
   text-align: center;
   margin-bottom: 25px;
   color: rgba(17, 16, 16, 0.918);
+}
+.stage-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stage-icon {
+  margin-left: 10px;
 }
 
 .stage-cards {
@@ -64,14 +76,16 @@
 
 /* Estilos para ícones */
 .icon-wrapper {
-  visibility: hidden;
+  visibility: visible;
   top: 50%;
   right: 10px;
   transform: translate(50%, -50%);
   position: absolute;
 }
 
-.card:hover .icon-wrapper {
+
+.card:hover .icon-wrapper,
+.stage:hover .icon-wrapper {
   visibility: visible;
 }
 

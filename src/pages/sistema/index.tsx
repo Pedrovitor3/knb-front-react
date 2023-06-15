@@ -637,8 +637,6 @@ const Sistema: React.FC = () => {
     setChave(item.key);
   };
 
-  console.log('item', itemsMenu);
-
   const MontaMenu = () => {
     const items: MenuItem[] = [];
     const rootMenu: string[] = [];

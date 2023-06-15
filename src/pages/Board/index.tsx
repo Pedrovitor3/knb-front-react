@@ -2,14 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { message, Dropdown, Space, Button, Popconfirm } from 'antd';
 import ModalBoard from '../../components/ModalBoard';
 import { deleteDemand, getDemand } from '../../services/axios/demandService';
-import './index.css';
 import { MoreOutlined } from '@ant-design/icons';
 
-interface DemandProps {
+import './index.css';
+
+interface DataType {
+  key: React.Key;
   id: string;
   name: string;
+  description: string;
   status: string;
 }
+
+type DataIndex = keyof DataType;
 
 type Props = {
   setChave: (id: string) => void;
@@ -17,11 +22,12 @@ type Props = {
 };
 
 const Board = ({ setChave, onDemandIdChange }: Props) => {
-  const [demands, setDemands] = useState<DemandProps[]>([]);
-  const [recordDemand, setRecordDemand] = useState<DemandProps | null>(null);
+  const [demands, setDemands] = useState<DataType[]>([]); // Adicione a tipagem para o estado axle
+
+  const [recordDemand, setRecordDemand] = useState<DataType | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [columns, setColumns] = useState<
-    { status: string; demands: DemandProps[] }[]
+    { status: string; demands: DataType[] }[]
   >([
     { status: 'aguardando', demands: [] },
     { status: 'executando', demands: [] },
@@ -35,9 +41,10 @@ const Board = ({ setChave, onDemandIdChange }: Props) => {
     loadingDemands();
   }, []);
 
-  useEffect(() => {
+  const updateDemandList = (demands: any) => {
+    setDemands(prevDemand => [...prevDemand, demands]);
     loadingDemands();
-  }, [demands]);
+  };
 
   async function loadingDemands() {
     const response = await getDemand('demand');
@@ -54,7 +61,7 @@ const Board = ({ setChave, onDemandIdChange }: Props) => {
     if (refresh) setDemands([]);
   };
 
-  const clickDeleteDemand = async (record: DemandProps) => {
+  const clickDeleteDemand = async (record: DataType) => {
     await deleteDemand(record.id);
     const newDemands = demands.filter(demand => demand.id !== record.id);
     setDemands(newDemands);
@@ -66,7 +73,7 @@ const Board = ({ setChave, onDemandIdChange }: Props) => {
     }
   };
 
-  const renderMenu = (record: DemandProps) => {
+  const renderMenu = (record: DataType) => {
     return (
       <Space size="middle">
         <Dropdown
@@ -156,10 +163,18 @@ const Board = ({ setChave, onDemandIdChange }: Props) => {
         </div>
       </div>
 
-      <ModalBoard
+      {/*<ModalBoard
         id={recordDemand?.id}
         closeModal={hideModal}
         openModal={showModal}
+      />
+      */}
+
+      <ModalBoard
+        updateDemandList={updateDemandList}
+        id={recordDemand?.id}
+        closeModal={hideModal}
+        openModal={showModal} // Passa a função handleAxleCreated como prop
       />
     </div>
   );

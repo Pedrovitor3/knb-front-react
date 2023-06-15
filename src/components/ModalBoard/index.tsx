@@ -1,4 +1,4 @@
-import { Modal, Form, Input, Col, message } from 'antd';
+import { Modal, Form, Input, Col, message, Select } from 'antd';
 import { useEffect } from 'react';
 import {
   getDemand,
@@ -6,13 +6,26 @@ import {
   updateDemand,
 } from '../../services/axios/demandService';
 
+const { Option } = Select;
+
+{
+  /*
 type Props = {
   id?: string;
   openModal: boolean;
   closeModal: (refresh: boolean) => void;
 };
+*/
+}
 
-const ModalBoard = ({ id, openModal, closeModal }: Props) => {
+type Props = {
+  updateDemandList: any;
+  id?: string;
+  openModal: boolean;
+  closeModal: (refresh: boolean) => void;
+};
+
+const ModalBoard = ({ updateDemandList, id, closeModal, openModal }: Props) => {
   const [form] = Form.useForm();
 
   const handleOk = (e: any) => {
@@ -59,11 +72,13 @@ const ModalBoard = ({ id, openModal, closeModal }: Props) => {
   const submitUpdate = async () => {
     const editingDemand = form.getFieldsValue(true);
     await updateDemand(editingDemand, id);
+    updateDemandList(editingDemand);
   };
 
   const submitCreate = async () => {
     const editingDemand = form.getFieldsValue(true);
     await postDemand(editingDemand);
+    updateDemandList(editingDemand); // Chama a função updateAxleList com o novo axle
   };
 
   return (
@@ -121,7 +136,13 @@ const ModalBoard = ({ id, openModal, closeModal }: Props) => {
               ]}
               hasFeedback
             >
-              <Input />
+              <Select>
+                <Option value="aguardando">Aguardando</Option>
+                <Option value="executando">Executando</Option>
+                <Option value="concluido">Concluído</Option>
+                <Option value="pendente">Pendente</Option>
+                <Option value="recusado">Recusado</Option>
+              </Select>
             </Form.Item>
           </Col>
         </Form>

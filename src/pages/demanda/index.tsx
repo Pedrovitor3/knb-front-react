@@ -1,20 +1,16 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, MenuProps, Popconfirm, Space, message } from 'antd';
-import { getStage } from '../../services/axios/stageService';
+import { deleteStage, getStage } from '../../services/axios/stageService';
 import { MoreOutlined } from '@ant-design/icons';
 import { deleteCard } from '../../services/axios/cardService';
-import ModalDemand from '../../components/ModalDemand';
 import ModalCard from '../../components/ModalCard';
+import ModalStage from '../../components/ModalStage';
 
 require('./index.css');
 
-interface CardProps {
-  id: string;
-  name: string;
-  stageId?: string;
-}
-
+{
+  /*
 interface StageProps {
   id: string;
   name: string;
@@ -23,33 +19,62 @@ interface StageProps {
   } | null;
   cards: CardProps[];
 }
+*/
+}
+
+interface CardProps {
+  id: string;
+  name: string;
+  stage: {
+    id: string;
+  };
+}
+
+interface DataType {
+  key: React.Key;
+  id: string;
+  name: string;
+  demand: {
+    id: string;
+  } | null;
+  cards: CardProps[];
+}
+type DataIndex = keyof DataType;
 
 type Props = {
   demandId: string;
 };
 
 const Stage = ({ demandId }: Props) => {
-  const [stages, setStages] = useState<StageProps[]>([]);
+  const [stages, setStages] = useState<DataType[]>([]);
   const [cards, setCards] = useState<CardProps[]>([]);
+
   const [recordCard, setRecordCard] = useState<any>({});
-  const [showModal, setShowModal] = useState(false);
+  const [recordStage, setRecordStage] = useState<any>({});
+
+  const [showStageModal, setShowStageModal] = useState(false);
   const [showCardModal, setShowCardModal] = useState(false);
 
   useEffect(() => {
-    setShowModal(false);
+    setShowStageModal(false);
     setShowCardModal(false);
     loadingStages();
   }, []);
 
-  useEffect(() => {
+  const updateStagesList = (stages: any) => {
+    setStages(prevAxle => [...prevAxle, stages]);
     loadingStages();
-  }, [stages]);
+  };
+
+  const updateCardList = (cards: any) => {
+    setStages(prevCards => [...prevCards, cards]);
+  };
 
   //Listando todos as fases daquela demanda
   async function loadingStages() {
     const response = await getStage('stage');
     if (response !== false) {
-      const filteredStages = response.data.filter((stage: StageProps) => {
+      const filteredStages = response.data.filter((stage: DataType) => {
         return stage.demand && stage.demand.id === demandId; //erro
       });
       setStages(filteredStages);
@@ -59,30 +84,78 @@ const Stage = ({ demandId }: Props) => {
   }
 
   const hideModal = (refresh: boolean) => {
-    setShowModal(false);
+    setShowStageModal(false);
     setShowCardModal(false);
     setRecordCard(null);
+    setRecordStage(null);
     if (refresh) setCards([]);
   };
 
-  const ClickDeleteCard = async (record: CardProps) => {
+  const clickDeleteCard = async (record: any) => {
     await deleteCard(record.id);
-    const newDemands = cards.filter(card => card.id !== record.id);
-    setCards(newDemands);
+    const newCards = cards.filter(card => card.id !== record.id);
+    setCards(newCards);
     loadingStages();
   };
 
-  const handleMenuClick: MenuProps['onClick'] = e => {
+  const clickDeleteStage = async (record: any) => {
+    await deleteStage(record.id);
+    const newStages = cards.filter(card => card.id !== record.id);
+    setCards(newStages);
+    loadingStages();
+  };
+
+  const handleCardMenuClick: MenuProps['onClick'] = e => {
     if (e.key === '1') {
-      setShowModal(true);
+      setShowCardModal(true);
+    }
+  };
+  const handleStageMenuClick: MenuProps['onClick'] = e => {
+    if (e.key === '1') {
+      setShowCardModal(true);
     }
   };
 
-  const handleOpenCard = (cardId: string) => {
-    setShowCardModal(true); // Altere o estado para abrir o modal 'use client'
+  const renderMenuStage = (record: any) => {
+    return (
+      <Space size="middle">
+        <Dropdown
+          menu={{
+            items: [
+              {
+                label: 'Alterar',
+                key: '1',
+                onClick: () => {
+                  setRecordStage(record);
+                },
+              },
+              {
+                label: (
+                  <Popconfirm
+                    title="Tem certeza de que deseja desabilitar este registro de demanda?"
+                    onConfirm={() => clickDeleteStage(record)}
+                  >
+                    Excluir
+                  </Popconfirm>
+                ),
+                key: '2',
+                danger: true,
+              },
+            ],
+            onClick: handleStageMenuClick,
+          }}
+        >
+          <a onClick={e => e.preventDefault()} className="option">
+            <Space>
+              <MoreOutlined />
+            </Space>
+          </a>
+        </Dropdown>
+      </Space>
+    );
   };
 
-  const renderMenu = (record: CardProps) => {
+  const renderMenuCard = (record: any) => {
     return (
       <Space size="middle">
         <Dropdown
@@ -99,7 +172,7 @@ const Stage = ({ demandId }: Props) => {
                 label: (
                   <Popconfirm
                     title="Tem certeza de que deseja desabilitar este registro de demanda?"
-                    onConfirm={() => ClickDeleteCard(record)}
+                    onConfirm={() => clickDeleteCard(record)}
                   >
                     Excluir
                   </Popconfirm>
@@ -108,7 +181,7 @@ const Stage = ({ demandId }: Props) => {
                 danger: true,
               },
             ],
-            onClick: handleMenuClick,
+            onClick: handleCardMenuClick,
           }}
         >
           <a onClick={e => e.preventDefault()} className="option">
@@ -128,35 +201,49 @@ const Stage = ({ demandId }: Props) => {
           className="botao"
           type="primary"
           onClick={() => {
-            setShowModal(true);
+            setShowStageModal(true);
+          }}
+        >
+          Criar nova etapa
+        </Button>
+        <Button
+          className="botao"
+          type="primary"
+          onClick={() => {
+            setShowCardModal(true);
           }}
         >
           Criar novo card
         </Button>
+
         <div className="body">
           {stages.length > 0 ? (
             stages.map(stage => (
               <div className="stage" key={stage.id}>
-                <div className="title">
+                <div className="stage-header">
                   <h2 className="stage-title">{stage.name}</h2>
+                  <span className="icon-wrapper stage-icon">
+                    {renderMenuStage({ ...stage })}
+                  </span>
                 </div>
 
                 <div className="card-list">
-                  {stage.cards.map(card => (
-                    <div className="card" key={card.id}>
-                      <Space>
-                        <Button
-                          onClick={() => handleOpenCard(card.id)} // Altere para uma função de callback para evitar a chamada imediata da função
-                          className="botao-card"
-                        >
-                          <h3 className="card-title">{card.name}</h3>
-                        </Button>
-                        <span className="icon-wrapper">
-                          {renderMenu({ ...card, stageId: stage.id })}
-                        </span>
-                      </Space>
-                    </div>
-                  ))}
+                  {stage.cards ? (
+                    stage.cards.map(card => (
+                      <div className="card" key={card.id}>
+                        <Space>
+                          <Button className="botao-card">
+                            <h3 className="card-title">{card.name}</h3>
+                          </Button>
+                          <span className="icon-wrapper">
+                            {renderMenuCard({ ...card })}
+                          </span>
+                        </Space>
+                      </div>
+                    ))
+                  ) : (
+                    <div>Nenhum card encontrado</div>
+                  )}
                 </div>
               </div>
             ))
@@ -164,20 +251,34 @@ const Stage = ({ demandId }: Props) => {
             <div>Você não tem nenhuma lista, comece a criar</div>
           )}
 
-          {recordCard && (
-            <ModalDemand
-              id={recordCard?.id}
-              stageId={recordCard.stageId}
-              openModal={showModal}
+          {/*
+          <ModalStage
+            updateStagesList={updateStagesList}
+            id={recordStage?.id}
+            demandId={demandId}
+            openModal={showModal}
+            closeModal={hideModal} // Passa a função handleAxleCreated como prop
+          />
+         */}
+
+          {recordStage && (
+            <ModalStage
+              id={recordStage?.id}
+              demandId={demandId}
+              openModal={showStageModal}
               closeModal={hideModal}
+              updateStagesList={updateStagesList}
             />
           )}
+
           {/*estou mandnando id de card duas vezes */}
           {showCardModal && (
             <ModalCard
-              cardId={recordCard?.id}
-              closeModal={hideModal}
+              id={recordCard?.id}
+              demandId={demandId}
               openModal={showCardModal}
+              closeModal={hideModal}
+              updateCardsList={updateCardList}
             />
           )}
         </div>

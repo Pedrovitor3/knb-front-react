@@ -1,31 +1,39 @@
 import { Modal, Form, Input, Col, message, Select } from 'antd';
 import { useEffect, useState } from 'react';
+
 import {
-  getDemand,
-  postDemand,
-  updateDemand,
-} from '../../services/axios/demandService';
+  getCard,
+  postCard,
+  updateCard,
+} from '../../services/axios/cardService';
+import { getStage } from '../../services/axios/stageService';
 
 type Props = {
-  cardId: string;
+  id: string;
+  demandId: string;
   openModal: boolean;
   closeModal: (refresh: boolean) => void;
+  updateCardsList: any;
 };
 
-const ModalCard = ({ cardId, openModal, closeModal }: Props) => {
+const ModalCard = ({
+  id,
+  demandId,
+  openModal,
+  closeModal,
+  updateCardsList,
+}: Props) => {
   const [form] = Form.useForm();
-  const { Option } = Select;
-  const [phases, setPhases] = useState<{ id: string; name: string }[]>([]);
-  const [selectedPhaseId, setSelectedPhaseId] = useState<string>('');
+  const [stages, setStages] = useState<any[]>([]);
 
-  console.log(cardId);
+  const { Option } = Select;
 
   const handleOk = (e: any) => {
     e.preventDefault();
     form
       .validateFields()
       .then(() => {
-        if (cardId) {
+        if (id) {
           submitUpdate();
         } else {
           submitCreate();
@@ -37,44 +45,64 @@ const ModalCard = ({ cardId, openModal, closeModal }: Props) => {
   };
 
   useEffect(() => {
-    loadingDemand();
-  }, [cardId]);
+    loadingCard();
+    loadingStages();
+  }, []);
 
-  async function loadingDemand() {
-    if (cardId) {
-      await getDemand(`card/${cardId}`).then(response => {
+  async function loadingCard() {
+    if (id) {
+      try {
+        const response = await getCard(`card/${id}`);
         if (response !== false) {
+          console.log(response.data);
           form.setFieldsValue({
             id: response.data.id,
             name: response.data.name,
             description: response.data.description,
+            stage: response.data.stage.id,
           });
         } else {
           message.error('Ocorreu um erro inesperado ao obter as demandas.');
         }
-      });
+      } catch (error) {
+        message.error('Ocorreu um erro inesperado ao obter as demandas.');
+      }
     }
   }
 
-  const handleChangePhase = (cardId: string) => {
-    setSelectedPhaseId(cardId);
-  };
+  async function loadingStages() {
+    try {
+      const response = await getStage('stage');
+      if (response !== false) {
+        const filteredStages = response.data.filter(
+          (stage: any) => stage.demand && stage.demand.id === demandId,
+        );
+        setStages(filteredStages);
+      } else {
+        message.error('Ocorreu um erro inesperado ao obter as etapas.');
+      }
+    } catch (error) {
+      message.error('Ocorreu um erro inesperado ao obter as etapas.');
+    }
+  }
 
   const submitUpdate = async () => {
-    const editingDemand = form.getFieldsValue(true);
-    await updateDemand(editingDemand, cardId);
+    const editingCard = form.getFieldsValue(true);
+    await updateCard(editingCard, id);
+    updateCardsList(editingCard);
   };
 
   const submitCreate = async () => {
-    const editingDemand = form.getFieldsValue(true);
-    await postDemand(editingDemand);
+    const editingCard = form.getFieldsValue(true);
+    await postCard(editingCard);
+    updateCardsList(editingCard);
   };
 
   return (
     <>
       <Modal
         visible={openModal}
-        title="Demanda"
+        title="Cartão"
         okText="Salvar"
         onCancel={() => {
           form.resetFields();
@@ -105,7 +133,7 @@ const ModalCard = ({ cardId, openModal, closeModal }: Props) => {
               rules={[
                 {
                   required: true,
-                  message: 'Por favor, insira a descrição da demanda',
+                  message: 'Por favor, insira a descrição do cartão',
                 },
               ]}
               hasFeedback
@@ -115,8 +143,8 @@ const ModalCard = ({ cardId, openModal, closeModal }: Props) => {
           </Col>
           <Col offset={1} span={16}>
             <Form.Item
-              name="phaseName"
-              label="Fase"
+              name="stage"
+              label="Etapa"
               rules={[
                 {
                   required: true,
@@ -125,12 +153,14 @@ const ModalCard = ({ cardId, openModal, closeModal }: Props) => {
               ]}
               hasFeedback
             >
-              <Select value={selectedPhaseId} onChange={handleChangePhase}>
-                {phases.map(phase => (
-                  <Option key={phase.id} value={phase.id}>
-                    {phase.name}
-                  </Option>
-                ))}
+              <Select>
+                {stages
+                  .filter(stage => stage.demand && stage.demand.id === demandId)
+                  .map(stage => (
+                    <Option key={stage.id} value={stage.id}>
+                      {stage.name}
+                    </Option>
+                  ))}
               </Select>
             </Form.Item>
           </Col>
