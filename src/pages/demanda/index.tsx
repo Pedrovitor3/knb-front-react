@@ -9,19 +9,6 @@ import ModalStage from '../../components/ModalStage';
 
 require('./index.css');
 
-{
-  /*
-interface StageProps {
-  id: string;
-  name: string;
-  demand: {
-    id: string;
-  } | null;
-  cards: CardProps[];
-}
-*/
-}
-
 interface CardProps {
   id: string;
   name: string;
@@ -88,21 +75,21 @@ const Stage = ({ demandId }: Props) => {
     setShowCardModal(false);
     setRecordCard(null);
     setRecordStage(null);
-    if (refresh) setCards([]);
+    if (refresh) {
+      setCards([]);
+    }
   };
 
   const clickDeleteCard = async (record: any) => {
     await deleteCard(record.id);
     const newCards = cards.filter(card => card.id !== record.id);
     setCards(newCards);
-    loadingStages();
   };
 
   const clickDeleteStage = async (record: any) => {
     await deleteStage(record.id);
     const newStages = cards.filter(card => card.id !== record.id);
     setCards(newStages);
-    loadingStages();
   };
 
   const handleCardMenuClick: MenuProps['onClick'] = e => {
@@ -251,16 +238,6 @@ const Stage = ({ demandId }: Props) => {
             <div>Você não tem nenhuma lista, comece a criar</div>
           )}
 
-          {/*
-          <ModalStage
-            updateStagesList={updateStagesList}
-            id={recordStage?.id}
-            demandId={demandId}
-            openModal={showModal}
-            closeModal={hideModal} // Passa a função handleAxleCreated como prop
-          />
-         */}
-
           {recordStage && (
             <ModalStage
               id={recordStage?.id}
@@ -271,7 +248,6 @@ const Stage = ({ demandId }: Props) => {
             />
           )}
 
-          {/*estou mandnando id de card duas vezes */}
           {showCardModal && (
             <ModalCard
               id={recordCard?.id}

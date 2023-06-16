@@ -25,6 +25,7 @@ const ModalCard = ({
 }: Props) => {
   const [form] = Form.useForm();
   const [stages, setStages] = useState<any[]>([]);
+  const [selectStageId, setSelectedStageId] = useState('');
 
   const { Option } = Select;
 
@@ -54,7 +55,6 @@ const ModalCard = ({
       try {
         const response = await getCard(`card/${id}`);
         if (response !== false) {
-          console.log(response.data);
           form.setFieldsValue({
             id: response.data.id,
             name: response.data.name,
@@ -97,6 +97,10 @@ const ModalCard = ({
     await postCard(editingCard);
     updateCardsList(editingCard);
   };
+
+  function handleSelectStage(value: any) {
+    setSelectedStageId(value); // Atualiza o estado com o ID selecionado
+  }
 
   return (
     <>
@@ -142,26 +146,22 @@ const ModalCard = ({
             </Form.Item>
           </Col>
           <Col offset={1} span={16}>
-            <Form.Item
-              name="stage"
-              label="Etapa"
-              rules={[
-                {
-                  required: true,
-                  message: 'Por favor, selecione a fase',
-                },
-              ]}
-              hasFeedback
-            >
-              <Select>
-                {stages
-                  .filter(stage => stage.demand && stage.demand.id === demandId)
-                  .map(stage => (
-                    <Option key={stage.id} value={stage.id}>
-                      {stage.name}
-                    </Option>
-                  ))}
-              </Select>
+            <Form.Item name={['stage']} label="Etapa">
+              <Select
+                showSearch
+                placeholder="Selecione o objeto"
+                onChange={value => handleSelectStage(value)}
+                value={selectStageId} // Define o valor do Select com o estado atual de selectTraining
+                filterOption={(input, option) =>
+                  (option?.label ?? '')
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+                }
+                options={stages.map(stages => ({
+                  label: stages.name,
+                  value: stages.id, // Define o ID do treinamento como valor da opção
+                }))}
+              />
             </Form.Item>
           </Col>
         </Form>
