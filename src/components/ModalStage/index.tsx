@@ -44,15 +44,18 @@ const ModalStage = ({
     loadingStage();
   }, []);
 
+  useEffect(() => {
+    loadingStage();
+  }, [id]);
+
   async function loadingStage() {
     if (id) {
       await getStage(`stage/${id}`).then(response => {
         if (response !== false) {
-          console.log('res', response.data);
           form.setFieldsValue({
             id: response.data.id,
             name: response.data.name,
-            demand: response.data.demand,
+            demand: response.data.demand.id,
           });
         } else {
           message.error('Ocorreu um erro inesperado ao obter as etapas.');
@@ -102,10 +105,7 @@ const ModalStage = ({
             </Form.Item>
           </Col>
           <Col offset={1} span={16}>
-            <Form.Item
-              name="demand"
-              initialValue={demandId} // Define o valor inicial do campo demand
-            ></Form.Item>
+            <Form.Item name="demand" initialValue={demandId}></Form.Item>
           </Col>
         </Form>
       </Modal>

@@ -48,6 +48,10 @@ const Stage = ({ demandId }: Props) => {
     loadingStages();
   }, []);
 
+  useEffect(() => {
+    loadingStages();
+  }, [stages]);
+
   const updateStagesList = (stages: any) => {
     setStages(prevAxle => [...prevAxle, stages]);
     loadingStages();
@@ -76,7 +80,7 @@ const Stage = ({ demandId }: Props) => {
     setRecordCard(null);
     setRecordStage(null);
     if (refresh) {
-      setCards([]);
+      setCards([]), setStages([]);
     }
   };
 
@@ -88,8 +92,8 @@ const Stage = ({ demandId }: Props) => {
 
   const clickDeleteStage = async (record: any) => {
     await deleteStage(record.id);
-    const newStages = cards.filter(card => card.id !== record.id);
-    setCards(newStages);
+    const newStages = stages.filter(stage => stage.id !== record.id);
+    setStages(newStages);
   };
 
   const handleCardMenuClick: MenuProps['onClick'] = e => {
@@ -97,12 +101,12 @@ const Stage = ({ demandId }: Props) => {
       setShowCardModal(true);
     }
   };
+
   const handleStageMenuClick: MenuProps['onClick'] = e => {
     if (e.key === '1') {
-      setShowCardModal(true);
+      setShowStageModal(true);
     }
   };
-
   const renderMenuStage = (record: any) => {
     return (
       <Space size="middle">
@@ -119,7 +123,7 @@ const Stage = ({ demandId }: Props) => {
               {
                 label: (
                   <Popconfirm
-                    title="Tem certeza de que deseja desabilitar este registro de demanda?"
+                    title="Tem certeza de que deseja desabilitar este registro et?"
                     onConfirm={() => clickDeleteStage(record)}
                   >
                     Excluir
@@ -158,7 +162,7 @@ const Stage = ({ demandId }: Props) => {
               {
                 label: (
                   <Popconfirm
-                    title="Tem certeza de que deseja desabilitar este registro de demanda?"
+                    title="Tem certeza de que deseja desabilitar este registro ?"
                     onConfirm={() => clickDeleteCard(record)}
                   >
                     Excluir
@@ -208,10 +212,12 @@ const Stage = ({ demandId }: Props) => {
             stages.map(stage => (
               <div className="stage" key={stage.id}>
                 <div className="stage-header">
-                  <h2 className="stage-title">{stage.name}</h2>
-                  <span className="icon-wrapper stage-icon">
-                    {renderMenuStage({ ...stage })}
-                  </span>
+                  <h2 className="stage-title">
+                    {stage.name}{' '}
+                    <span className="icon-wrapper-stage">
+                      {renderMenuStage({ ...stage, id: stage.id })}
+                    </span>
+                  </h2>
                 </div>
 
                 <div className="card-list">
@@ -222,7 +228,7 @@ const Stage = ({ demandId }: Props) => {
                           <Button className="botao-card">
                             <h3 className="card-title">{card.name}</h3>
                           </Button>
-                          <span className="icon-wrapper">
+                          <span className="icon-wrapper-card">
                             {renderMenuCard({ ...card })}
                           </span>
                         </Space>

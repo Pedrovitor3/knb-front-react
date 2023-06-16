@@ -4,6 +4,7 @@
   justify-content: space-around;
   padding: 20px;
   font-family: "Helvetica Neue", Arial, sans-serif;
+
 }
 
 /* Botões */
@@ -30,6 +31,7 @@
   background-color: #f4f4f4;
   border-radius: 6px;
   height: 450px;
+  position: relative;
 }
 
 
@@ -75,17 +77,26 @@
 
 
 /* Estilos para ícones */
-.icon-wrapper {
-  visibility: visible;
+.icon-wrapper-card {
+  visibility: hidden;
   top: 50%;
   right: 10px;
   transform: translate(50%, -50%);
   position: absolute;
 }
 
+.icon-wrapper-stage {
+  visibility: hidden;
+  top: 25px;
+  right: 15px;
+  transform: translate(50%, -50%);
+  position: absolute;
 
-.card:hover .icon-wrapper,
-.stage:hover .icon-wrapper {
+}
+
+
+.card:hover .icon-wrapper-card,
+.stage:hover .icon-wrapper-stage {
   visibility: visible;
 }
 

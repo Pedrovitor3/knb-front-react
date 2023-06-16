@@ -63,6 +63,7 @@ export const updateDemand = async (demand: Demand, id: any) => {
 export async function deleteDemand(id: any) {
   try {
     await APIDemand.delete(`demand/${id}`);
+    message.warning('cartão excluido');
   } catch (error) {
     if (error === 500) {
       message.info('O tempo da sua sessão expirou, faça o login novamente');
