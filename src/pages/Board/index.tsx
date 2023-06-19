@@ -22,8 +22,7 @@ type Props = {
 };
 
 const Board = ({ setChave, onDemandIdChange }: Props) => {
-  const [demands, setDemands] = useState<DataType[]>([]); // Adicione a tipagem para o estado axle
-
+  const [demands, setDemands] = useState<DataType[]>([]); // Adicione a tipagem para o estado
   const [recordDemand, setRecordDemand] = useState<DataType | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [columns, setColumns] = useState<
@@ -129,7 +128,7 @@ const Board = ({ setChave, onDemandIdChange }: Props) => {
   return (
     <div>
       <Button
-        className="botao"
+        className="botao-board"
         type="primary"
         onClick={() => {
           setShowModal(true);
@@ -137,7 +136,7 @@ const Board = ({ setChave, onDemandIdChange }: Props) => {
       >
         Criar nova demanda
       </Button>
-      <div className="body">
+      <div className="body-board">
         <div className="demand-list">
           {columns.map(column => (
             <div className="column" key={column.status}>
@@ -146,7 +145,7 @@ const Board = ({ setChave, onDemandIdChange }: Props) => {
                 <div className="demand" key={demand.id}>
                   <Space>
                     <Button
-                      className="botao-card"
+                      className="botao-stage"
                       onClick={() => {
                         setChave('5');
                         handleDemandClick(demand.id);

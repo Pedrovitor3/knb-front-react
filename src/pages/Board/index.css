@@ -1,11 +1,24 @@
 /* index.css */
 
-.body {
+.body-board {
   display: flex;
   justify-content: center;
   padding: 20px;
   font-family: "Helvetica Neue", Arial, sans-serif;
 }
+
+.botao-board {
+  margin-bottom: 20px;
+}
+
+.botao-stage {
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  font-size: 14px;
+  color: #1890ff;
+}
+
 
 .column {
   width: 250px;
@@ -38,13 +51,7 @@
   position: relative;
 }
 
-.botao-card {
-  padding: 0;
-  border: none;
-  background-color: transparent;
-  font-size: 14px;
-  color: #1890ff;
-}
+
 
 .demand-title {
   margin: 0;
@@ -57,11 +64,6 @@
   margin-left: auto;
 }
 
-
-
-.botao {
-  margin-bottom: 20px;
-}
 
 /* Estilos para ícones */
 .icon-wrapper {
@@ -107,4 +109,3 @@
   margin-left: 10px;
 }
 
-/* Add any additional CSS styles as needed */

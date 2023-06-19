@@ -15,9 +15,9 @@ type Props = {
 };
 
 const ModalStage = ({
+  updateStagesList,
   id,
   demandId,
-  updateStagesList,
   openModal,
   closeModal,
 }: Props) => {

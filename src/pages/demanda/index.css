@@ -1,18 +1,27 @@
 /* Estilos para a página Trello */
 .body {
+  margin: 0;
+  padding: 0;
   display: flex;
   justify-content: space-around;
   padding: 20px;
   font-family: "Helvetica Neue", Arial, sans-serif;
-
+  overflow-x: auto; /* Adicionar scroll horizontal */
+  max-width: 100%;
+  overflow-y: auto;
 }
 
 /* Botões */
-.botao {
-  margin: 0 15px 25px;
+.botao-criar {
+  margin: 0 15px 5px;
 }
 
-.botao-card{
+.botao-card {
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  font-size: 14px;
+  color: #1890ff;
   border: transparent;
 }
 
@@ -22,25 +31,24 @@
   justify-content: space-around;
 }
 
-
 /* Estilos para as fases */
 .stage {
   flex: 1;
-  margin: 0px 10px;
+  margin: 0px 5px;
   padding: 10px;
   background-color: #f4f4f4;
   border-radius: 6px;
-  height: 450px;
   position: relative;
+  overflow-y: auto; /* Adicionar scroll vertical */
 }
 
-
-.stage-title{
+.stage-title {
   font-size: 22px;
   text-align: center;
   margin-bottom: 25px;
   color: rgba(17, 16, 16, 0.918);
 }
+
 .stage-header {
   display: flex;
   align-items: center;
@@ -68,14 +76,20 @@
   position: relative;
 }
 
-
 .card-title {
   font-size: 16px;
   margin-bottom: 5px;
   color: black;
 }
 
-
+.tag-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.card-title {
+  margin-left: 20px;
+}
 /* Estilos para ícones */
 .icon-wrapper-card {
   visibility: hidden;
@@ -91,9 +105,7 @@
   right: 15px;
   transform: translate(50%, -50%);
   position: absolute;
-
 }
-
 
 .card:hover .icon-wrapper-card,
 .stage:hover .icon-wrapper-stage {

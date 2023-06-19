@@ -1,4 +1,4 @@
-import { Modal, Form, Input, Col, message, Select } from 'antd';
+import { Modal, Form, Input, Col, message, Select, Row } from 'antd';
 import { useEffect, useState } from 'react';
 
 import {
@@ -9,19 +9,19 @@ import {
 import { getStage } from '../../services/axios/stageService';
 
 type Props = {
+  updateCardsList: any;
   id: string;
   demandId: string;
   openModal: boolean;
   closeModal: (refresh: boolean) => void;
-  updateCardsList: any;
 };
 
 const ModalCard = ({
+  updateCardsList,
   id,
   demandId,
   openModal,
   closeModal,
-  updateCardsList,
 }: Props) => {
   const [form] = Form.useForm();
   const [stages, setStages] = useState<any[]>([]);
@@ -55,11 +55,14 @@ const ModalCard = ({
       try {
         const response = await getCard(`card/${id}`);
         if (response !== false) {
+          console.log(response.data);
           form.setFieldsValue({
             id: response.data.id,
             name: response.data.name,
             description: response.data.description,
             stage: response.data.stage.id,
+            tag: response.data.tag,
+            comment: response.data.comment,
           });
         } else {
           message.error('Ocorreu um erro inesperado ao obter as demandas.');
@@ -115,7 +118,7 @@ const ModalCard = ({
         onOk={handleOk}
       >
         <Form layout="vertical" form={form}>
-          <Col offset={1} span={16}>
+          <Col offset={1} span={17}>
             <Form.Item
               name="name"
               label="Nome"
@@ -130,7 +133,7 @@ const ModalCard = ({
               <Input />
             </Form.Item>
           </Col>
-          <Col offset={1} span={16}>
+          <Col offset={1} span={17}>
             <Form.Item
               name="description"
               label="Descrição"
@@ -142,25 +145,59 @@ const ModalCard = ({
               ]}
               hasFeedback
             >
-              <Input />
+              <Input.TextArea
+                autoSize={{ minRows: 2, maxRows: 6 }} // Configuração para permitir a quebra de linha
+                style={{ height: '70px' }}
+              />
             </Form.Item>
           </Col>
-          <Col offset={1} span={16}>
-            <Form.Item name={['stage']} label="Etapa">
-              <Select
-                showSearch
-                placeholder="Selecione o objeto"
-                onChange={value => handleSelectStage(value)}
-                value={selectStageId} // Define o valor do Select com o estado atual de selectTraining
-                filterOption={(input, option) =>
-                  (option?.label ?? '')
-                    .toLowerCase()
-                    .includes(input.toLowerCase())
-                }
-                options={stages.map(stages => ({
-                  label: stages.name,
-                  value: stages.id, // Define o ID do treinamento como valor da opção
-                }))}
+
+          <Row gutter={16}>
+            <Col offset={1} span={12}>
+              <Form.Item
+                name={['stage']}
+                label="Etapa"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Por favor, insira a descrição do cartão',
+                  },
+                ]}
+                hasFeedback
+              >
+                <Select
+                  showSearch
+                  placeholder="Selecione o objeto"
+                  onChange={value => handleSelectStage(value)}
+                  value={selectStageId}
+                  filterOption={(input, option) =>
+                    (option?.label ?? '')
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
+                  options={stages.map(stage => ({
+                    label: stage.name,
+                    value: stage.id,
+                  }))}
+                />
+              </Form.Item>
+            </Col>
+            <Col offset={4} span={7}>
+              <Form.Item name="tag" label="Etiqueta" hasFeedback>
+                <Select>
+                  <Option value="nenhuma">nenhuma</Option>
+                  <Option value="importante">importante</Option>
+                  <Option value="erro">erro</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Col offset={1} span={17}>
+            <Form.Item name="comment" label="Comentario" hasFeedback>
+              <Input.TextArea
+                autoSize={{ minRows: 2, maxRows: 6 }} // Configuração para permitir a quebra de linha
+                style={{ height: '70px' }}
               />
             </Form.Item>
           </Col>

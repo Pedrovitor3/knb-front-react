@@ -29,10 +29,6 @@ export const APIStage = axios.create({
   baseURL: urlsServices.BACKENDWS,
 });
 
-export const APITag = axios.create({
-  baseURL: urlsServices.BACKENDWS,
-});
-
 export const APIUsersDemand = axios.create({
   baseURL: urlsServices.BACKENDWS,
 });

@@ -2,10 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, MenuProps, Popconfirm, Space, message } from 'antd';
 import { deleteStage, getStage } from '../../services/axios/stageService';
-import { MoreOutlined } from '@ant-design/icons';
+import { MoreOutlined, TagFilled, TagOutlined } from '@ant-design/icons';
 import { deleteCard } from '../../services/axios/cardService';
 import ModalCard from '../../components/ModalCard';
 import ModalStage from '../../components/ModalStage';
+import ModalCardOpen from '../../components/ModalStage copy';
 
 require('./index.css');
 
@@ -38,27 +39,26 @@ const Stage = ({ demandId }: Props) => {
 
   const [recordCard, setRecordCard] = useState<any>({});
   const [recordStage, setRecordStage] = useState<any>({});
+  const [idCard, setIdCard] = useState<any>({});
 
   const [showStageModal, setShowStageModal] = useState(false);
   const [showCardModal, setShowCardModal] = useState(false);
+  const [openCardModal, setOpenCardModal] = useState(false);
 
   useEffect(() => {
     setShowStageModal(false);
     setShowCardModal(false);
+    setOpenCardModal(false);
     loadingStages();
   }, []);
 
-  useEffect(() => {
-    loadingStages();
-  }, [stages]);
-
   const updateStagesList = (stages: any) => {
-    setStages(prevAxle => [...prevAxle, stages]);
+    setStages(prevStage => [...prevStage, stages]);
     loadingStages();
   };
 
   const updateCardList = (cards: any) => {
-    setStages(prevCards => [...prevCards, cards]);
+    setCards(prevCards => [...prevCards, cards]);
   };
 
   //Listando todos as fases daquela demanda
@@ -66,7 +66,7 @@ const Stage = ({ demandId }: Props) => {
     const response = await getStage('stage');
     if (response !== false) {
       const filteredStages = response.data.filter((stage: DataType) => {
-        return stage.demand && stage.demand.id === demandId; //erro
+        return stage.demand && stage.demand.id === demandId;
       });
       setStages(filteredStages);
     } else {
@@ -77,11 +77,11 @@ const Stage = ({ demandId }: Props) => {
   const hideModal = (refresh: boolean) => {
     setShowStageModal(false);
     setShowCardModal(false);
+    setOpenCardModal(false);
     setRecordCard(null);
     setRecordStage(null);
-    if (refresh) {
-      setCards([]), setStages([]);
-    }
+    setIdCard(null);
+    if (refresh) setStages([]);
   };
 
   const clickDeleteCard = async (record: any) => {
@@ -94,6 +94,7 @@ const Stage = ({ demandId }: Props) => {
     await deleteStage(record.id);
     const newStages = stages.filter(stage => stage.id !== record.id);
     setStages(newStages);
+    loadingStages();
   };
 
   const handleCardMenuClick: MenuProps['onClick'] = e => {
@@ -107,6 +108,12 @@ const Stage = ({ demandId }: Props) => {
       setShowStageModal(true);
     }
   };
+
+  const handleCardModalClick = (id: any) => {
+    setOpenCardModal(true);
+    setIdCard(id);
+  };
+
   const renderMenuStage = (record: any) => {
     return (
       <Space size="middle">
@@ -185,11 +192,22 @@ const Stage = ({ demandId }: Props) => {
     );
   };
 
+  const renderTag = (record: any) => {
+    const card = record;
+    if (card.tag !== 'nenhuma') {
+      if (card.tag === 'importante') {
+        return <TagFilled style={{ color: 'blue', marginRight: '5px' }} />;
+      } else {
+        return <TagFilled style={{ color: 'red', marginRight: '5px' }} />;
+      }
+    }
+  };
+
   return (
     <>
       <div>
         <Button
-          className="botao"
+          className="botao-criar"
           type="primary"
           onClick={() => {
             setShowStageModal(true);
@@ -198,7 +216,7 @@ const Stage = ({ demandId }: Props) => {
           Criar nova etapa
         </Button>
         <Button
-          className="botao"
+          className="botao-criar"
           type="primary"
           onClick={() => {
             setShowCardModal(true);
@@ -213,10 +231,10 @@ const Stage = ({ demandId }: Props) => {
               <div className="stage" key={stage.id}>
                 <div className="stage-header">
                   <h2 className="stage-title">
-                    {stage.name}{' '}
                     <span className="icon-wrapper-stage">
                       {renderMenuStage({ ...stage, id: stage.id })}
                     </span>
+                    {stage.name}
                   </h2>
                 </div>
 
@@ -224,10 +242,19 @@ const Stage = ({ demandId }: Props) => {
                   {stage.cards ? (
                     stage.cards.map(card => (
                       <div className="card" key={card.id}>
+                        <div className="tag-wrapper">
+                          {renderTag({ ...card })}
+                        </div>
                         <Space>
-                          <Button className="botao-card">
+                          <Button
+                            onClick={() => {
+                              handleCardModalClick(card.id);
+                            }}
+                            className="botao-card"
+                          >
                             <h3 className="card-title">{card.name}</h3>
                           </Button>
+
                           <span className="icon-wrapper-card">
                             {renderMenuCard({ ...card })}
                           </span>
@@ -244,15 +271,13 @@ const Stage = ({ demandId }: Props) => {
             <div>Você não tem nenhuma lista, comece a criar</div>
           )}
 
-          {recordStage && (
-            <ModalStage
-              id={recordStage?.id}
-              demandId={demandId}
-              openModal={showStageModal}
-              closeModal={hideModal}
-              updateStagesList={updateStagesList}
-            />
-          )}
+          <ModalStage
+            id={recordStage?.id}
+            demandId={demandId}
+            openModal={showStageModal}
+            closeModal={hideModal}
+            updateStagesList={updateStagesList}
+          />
 
           {showCardModal && (
             <ModalCard
@@ -261,6 +286,13 @@ const Stage = ({ demandId }: Props) => {
               openModal={showCardModal}
               closeModal={hideModal}
               updateCardsList={updateCardList}
+            />
+          )}
+          {openCardModal && (
+            <ModalCardOpen
+              id={idCard}
+              openModal={openCardModal}
+              closeModal={hideModal}
             />
           )}
         </div>
