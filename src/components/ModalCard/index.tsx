@@ -28,7 +28,7 @@ const ModalCard = ({
   const [stages, setStages] = useState<any[]>([]);
   const [tags, setTags] = useState<any[]>([]);
   const [selectStageId, setSelectedStageId] = useState('');
-  const [selectTagId, setSelectTagId] = useState('');
+  const [selectTagId, setSelectedTagId] = useState('');
 
   const { Option } = Select;
 
@@ -60,14 +60,15 @@ const ModalCard = ({
         const response = await getCard(`card/${id}`);
         if (response !== false) {
           console.log(response.data);
-          form.setFieldsValue({
+          const cardData = {
             id: response.data.id,
             name: response.data.name,
             description: response.data.description,
             stage: response.data.stage.id,
-            tag: response.data.tag.id,
+            tag: response.data.tag ? response.data.tag.id : null,
             comment: response.data.comment,
-          });
+          };
+          form.setFieldsValue(cardData);
         } else {
           message.error('Ocorreu um erro inesperado ao obter os cartões.');
         }
@@ -122,6 +123,11 @@ const ModalCard = ({
     setSelectedStageId(value); // Atualiza o estado com o ID selecionado
   }
 
+  function handleSelectTag(value: any) {
+    setSelectedTagId(value); // Atualiza o estado com o ID selecionado
+  }
+
+  console.log('ta', tags);
   return (
     <>
       <Modal
@@ -204,15 +210,16 @@ const ModalCard = ({
                 <Select
                   showSearch
                   placeholder="Selecione a etiqueta"
+                  onChange={value => handleSelectTag(value)}
                   value={selectTagId}
                   filterOption={(input, option) =>
                     (option?.label ?? '')
                       .toLowerCase()
                       .includes(input.toLowerCase())
                   }
-                  options={tags.map(tags => ({
-                    label: tags.name,
-                    value: tags.id,
+                  options={tags.map(tag => ({
+                    label: tag.name,
+                    value: tag.id,
                   }))}
                 />
               </Form.Item>
