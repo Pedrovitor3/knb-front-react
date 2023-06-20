@@ -1,27 +1,18 @@
 import { Modal, Form, Input, Col, message } from 'antd';
 import { useEffect, useState } from 'react';
-import {
-  getStage,
-  postStage,
-  updateStage,
-} from '../../services/axios/stageService';
+import { getTag, postTag, updateTag } from '../../services/axios/tagService';
 
 type Props = {
-  updateStagesList: any;
+  updateCardsList: any;
   id: string;
-  demandId: string;
+  cardId: string;
   openModal: boolean;
   closeModal: (refresh: boolean) => void;
 };
 
-const ModalStage = ({
-  updateStagesList,
-  id,
-  demandId,
-  openModal,
-  closeModal,
-}: Props) => {
+const ModalTag = ({ updateCardsList, id, openModal, closeModal }: Props) => {
   const [form] = Form.useForm();
+  const [tags, setTags] = useState<any[]>([]);
   //const [stages, setStages] = useState<{ id: string; name: string }[]>([]);
 
   const handleOk = (e: any) => {
@@ -41,40 +32,41 @@ const ModalStage = ({
   };
 
   useEffect(() => {
-    loadingStage();
+    loadingTags();
   }, []);
 
   useEffect(() => {
-    loadingStage();
+    loadingTags();
   }, [id]);
 
-  async function loadingStage() {
-    if (id) {
-      await getStage(`stage/${id}`).then(response => {
-        if (response !== false) {
-          console.log('stage', response.data);
-          form.setFieldsValue({
-            id: response.data.id,
-            name: response.data.name,
-            demand: response.data.demand.id,
-          });
-        } else {
-          message.error('Ocorreu um erro inesperado ao obter as etapas.');
-        }
-      });
+  async function loadingTags() {
+    try {
+      const response = await getTag(`tag`);
+      if (response !== false) {
+        console.log(response.data);
+        form.setFieldsValue({
+          id: response.data.id,
+          name: response.data.name,
+          cor: response.data.cor,
+        });
+      } else {
+        message.error('Ocorreu um erro inesperado ao obter as etiquetas.');
+      }
+    } catch (error) {
+      message.error('Ocorreu um erro inesperado ao obter as etiquetas.');
     }
   }
 
   const submitUpdate = async () => {
     const editingStage = form.getFieldsValue(true);
-    await updateStage(editingStage, id);
-    updateStagesList(editingStage); // Chama a função updateAxleList com o novo axle
+    await updateTag(editingStage, id);
+    updateCardsList(editingStage); // Chama a função updateAxleList com o novo axle
   };
 
   const submitCreate = async () => {
     const editingStage = form.getFieldsValue(true);
-    await postStage(editingStage);
-    updateStagesList(editingStage); // Chama a função updateAxleList com o novo axle
+    await postTag(editingStage);
+    updateCardsList(editingStage); // Chama a função updateAxleList com o novo axle
   };
 
   return (
@@ -106,7 +98,19 @@ const ModalStage = ({
             </Form.Item>
           </Col>
           <Col offset={1} span={16}>
-            <Form.Item name="demand" initialValue={demandId}></Form.Item>
+            <Form.Item
+              name="cor"
+              label="Cor"
+              rules={[
+                {
+                  required: true,
+                  message: 'Por favor, insira o nome da etapa',
+                },
+              ]}
+              hasFeedback
+            >
+              <Input />
+            </Form.Item>
           </Col>
         </Form>
       </Modal>
@@ -114,4 +118,4 @@ const ModalStage = ({
   );
 };
 
-export default ModalStage;
+export default ModalTag;

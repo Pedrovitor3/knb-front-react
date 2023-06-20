@@ -7,6 +7,7 @@ import {
   updateCard,
 } from '../../services/axios/cardService';
 import { getStage } from '../../services/axios/stageService';
+import { getTag } from '../../services/axios/tagService';
 
 type Props = {
   updateCardsList: any;
@@ -25,7 +26,9 @@ const ModalCard = ({
 }: Props) => {
   const [form] = Form.useForm();
   const [stages, setStages] = useState<any[]>([]);
+  const [tags, setTags] = useState<any[]>([]);
   const [selectStageId, setSelectedStageId] = useState('');
+  const [selectTagId, setSelectTagId] = useState('');
 
   const { Option } = Select;
 
@@ -48,6 +51,7 @@ const ModalCard = ({
   useEffect(() => {
     loadingCard();
     loadingStages();
+    loadingTags();
   }, []);
 
   async function loadingCard() {
@@ -61,14 +65,14 @@ const ModalCard = ({
             name: response.data.name,
             description: response.data.description,
             stage: response.data.stage.id,
-            tag: response.data.tag,
+            tag: response.data.tag.id,
             comment: response.data.comment,
           });
         } else {
-          message.error('Ocorreu um erro inesperado ao obter as demandas.');
+          message.error('Ocorreu um erro inesperado ao obter os cartões.');
         }
       } catch (error) {
-        message.error('Ocorreu um erro inesperado ao obter as demandas.');
+        message.error('Ocorreu um erro inesperado ao obter os cartões.');
       }
     }
   }
@@ -86,6 +90,19 @@ const ModalCard = ({
       }
     } catch (error) {
       message.error('Ocorreu um erro inesperado ao obter as etapas.');
+    }
+  }
+
+  async function loadingTags() {
+    try {
+      const response = await getTag(`tag`);
+      if (response !== false) {
+        setTags(response.data);
+      } else {
+        message.error('Ocorreu um erro inesperado ao obter as etiquetas.');
+      }
+    } catch (error) {
+      message.error('Ocorreu um erro inesperado ao obter as etiquetas.');
     }
   }
 
@@ -153,7 +170,7 @@ const ModalCard = ({
           </Col>
 
           <Row gutter={16}>
-            <Col offset={1} span={12}>
+            <Col offset={1} span={10}>
               <Form.Item
                 name={['stage']}
                 label="Etapa"
@@ -182,13 +199,22 @@ const ModalCard = ({
                 />
               </Form.Item>
             </Col>
-            <Col offset={4} span={7}>
-              <Form.Item name="tag" label="Etiqueta" hasFeedback>
-                <Select>
-                  <Option value="nenhuma">nenhuma</Option>
-                  <Option value="importante">importante</Option>
-                  <Option value="erro">erro</Option>
-                </Select>
+            <Col offset={4} span={8}>
+              <Form.Item name={['tag']} label="Etiqueta" hasFeedback>
+                <Select
+                  showSearch
+                  placeholder="Selecione a etiqueta"
+                  value={selectTagId}
+                  filterOption={(input, option) =>
+                    (option?.label ?? '')
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
+                  options={tags.map(tags => ({
+                    label: tags.name,
+                    value: tags.id,
+                  }))}
+                />
               </Form.Item>
             </Col>
           </Row>

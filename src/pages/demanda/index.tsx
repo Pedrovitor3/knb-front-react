@@ -2,11 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, MenuProps, Popconfirm, Space, message } from 'antd';
 import { deleteStage, getStage } from '../../services/axios/stageService';
-import { MoreOutlined, TagFilled, TagOutlined } from '@ant-design/icons';
+import { MoreOutlined, TagFilled } from '@ant-design/icons';
 import { deleteCard } from '../../services/axios/cardService';
 import ModalCard from '../../components/ModalCard';
 import ModalStage from '../../components/ModalStage';
-import ModalCardOpen from '../../components/ModalStage copy';
+import ModalTag from '../../components/ModalTag';
 
 require('./index.css');
 
@@ -39,16 +39,18 @@ const Stage = ({ demandId }: Props) => {
 
   const [recordCard, setRecordCard] = useState<any>({});
   const [recordStage, setRecordStage] = useState<any>({});
-  const [idCard, setIdCard] = useState<any>({});
+  const [recordTag, setRecordTag] = useState<any>({});
 
   const [showStageModal, setShowStageModal] = useState(false);
   const [showCardModal, setShowCardModal] = useState(false);
-  const [openCardModal, setOpenCardModal] = useState(false);
+  const [showTagModal, setShowTagModal] = useState(false);
+  const [showCommentModal, setShowCommentModal] = useState(false);
 
   useEffect(() => {
     setShowStageModal(false);
     setShowCardModal(false);
-    setOpenCardModal(false);
+    setShowTagModal(false);
+    setShowCommentModal(false);
     loadingStages();
   }, []);
 
@@ -59,6 +61,7 @@ const Stage = ({ demandId }: Props) => {
 
   const updateCardList = (cards: any) => {
     setCards(prevCards => [...prevCards, cards]);
+    loadingStages();
   };
 
   //Listando todos as fases daquela demanda
@@ -77,10 +80,10 @@ const Stage = ({ demandId }: Props) => {
   const hideModal = (refresh: boolean) => {
     setShowStageModal(false);
     setShowCardModal(false);
-    setOpenCardModal(false);
+    setShowTagModal(false);
+    setShowCommentModal(false);
     setRecordCard(null);
     setRecordStage(null);
-    setIdCard(null);
     if (refresh) setStages([]);
   };
 
@@ -100,6 +103,10 @@ const Stage = ({ demandId }: Props) => {
   const handleCardMenuClick: MenuProps['onClick'] = e => {
     if (e.key === '1') {
       setShowCardModal(true);
+    } else if (e.key === '2') {
+      setShowTagModal(true);
+    } else if (e.key === '3') {
+      setShowCommentModal(true);
     }
   };
 
@@ -107,11 +114,6 @@ const Stage = ({ demandId }: Props) => {
     if (e.key === '1') {
       setShowStageModal(true);
     }
-  };
-
-  const handleCardModalClick = (id: any) => {
-    setOpenCardModal(true);
-    setIdCard(id);
   };
 
   const renderMenuStage = (record: any) => {
@@ -167,6 +169,20 @@ const Stage = ({ demandId }: Props) => {
                 },
               },
               {
+                label: 'Adcionar etiqueta',
+                key: '2',
+                onClick: () => {
+                  setRecordCard(record);
+                },
+              },
+              {
+                label: 'Adcionar comentario',
+                key: '3',
+                onClick: () => {
+                  setRecordCard(record);
+                },
+              },
+              {
                 label: (
                   <Popconfirm
                     title="Tem certeza de que deseja desabilitar este registro ?"
@@ -175,7 +191,7 @@ const Stage = ({ demandId }: Props) => {
                     Excluir
                   </Popconfirm>
                 ),
-                key: '2',
+                key: '4',
                 danger: true,
               },
             ],
@@ -191,15 +207,11 @@ const Stage = ({ demandId }: Props) => {
       </Space>
     );
   };
-
   const renderTag = (record: any) => {
     const card = record;
-    if (card.tag !== 'nenhuma') {
-      if (card.tag === 'importante') {
-        return <TagFilled style={{ color: 'blue', marginRight: '5px' }} />;
-      } else {
-        return <TagFilled style={{ color: 'red', marginRight: '5px' }} />;
-      }
+    if (card.tag !== null) {
+      const cor = card.tag.cor;
+      return <TagFilled style={{ color: cor }}></TagFilled>;
     }
   };
 
@@ -243,18 +255,12 @@ const Stage = ({ demandId }: Props) => {
                     stage.cards.map(card => (
                       <div className="card" key={card.id}>
                         <div className="tag-wrapper">
-                          {renderTag({ ...card })}
+                          <Button className="button-icon">
+                            {renderTag({ ...card })}
+                          </Button>
                         </div>
                         <Space>
-                          <Button
-                            onClick={() => {
-                              handleCardModalClick(card.id);
-                            }}
-                            className="botao-card"
-                          >
-                            <h3 className="card-title">{card.name}</h3>
-                          </Button>
-
+                          <h3 className="card-title">{card.name}</h3>
                           <span className="icon-wrapper-card">
                             {renderMenuCard({ ...card })}
                           </span>
@@ -288,13 +294,14 @@ const Stage = ({ demandId }: Props) => {
               updateCardsList={updateCardList}
             />
           )}
-          {openCardModal && (
-            <ModalCardOpen
-              id={idCard}
-              openModal={openCardModal}
-              closeModal={hideModal}
-            />
-          )}
+
+          <ModalTag
+            id={recordTag.id}
+            cardId={recordCard?.id}
+            openModal={showTagModal}
+            closeModal={hideModal}
+            updateCardsList={updateCardList}
+          />
         </div>
       </div>
     </>

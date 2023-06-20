@@ -14,7 +14,7 @@ type Props = {
   closeModal: (refresh: boolean) => void;
 };
 
-const ModalStage = ({
+const ModalComment = ({
   updateStagesList,
   id,
   demandId,
@@ -52,7 +52,6 @@ const ModalStage = ({
     if (id) {
       await getStage(`stage/${id}`).then(response => {
         if (response !== false) {
-          console.log('stage', response.data);
           form.setFieldsValue({
             id: response.data.id,
             name: response.data.name,
@@ -114,4 +113,4 @@ const ModalStage = ({
   );
 };
 
-export default ModalStage;
+export default ModalComment;

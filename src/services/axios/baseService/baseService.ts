@@ -4,6 +4,9 @@ import { urlsServices } from '../../../configs/urlsConfig';
 export const APIAnswer = axios.create({
   baseURL: urlsServices.BACKENDWS,
 });
+export const APITag = axios.create({
+  baseURL: urlsServices.BACKENDWS,
+});
 
 export const APIAxle = axios.create({
   baseURL: urlsServices.BACKENDWS,
