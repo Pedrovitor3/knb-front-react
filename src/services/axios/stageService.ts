@@ -63,7 +63,7 @@ export const updateStage = async (stage: Stage, id: any) => {
 export async function deleteStage(id: any) {
   try {
     await APIStage.delete(`stage/${id}`);
-    message.warning('cartão excluido');
+    message.warning('Etapa excluida');
   } catch (error) {
     if (error === 500) {
       message.info('O tempo da sua sessão expirou, faça o login novamente');

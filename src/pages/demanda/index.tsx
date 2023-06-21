@@ -16,6 +16,9 @@ interface CardProps {
   stage: {
     id: string;
   };
+  tag: {
+    id: string;
+  };
 }
 
 interface DataType {
@@ -84,13 +87,15 @@ const Stage = ({ demandId }: Props) => {
     setShowCommentModal(false);
     setRecordCard(null);
     setRecordStage(null);
-    if (refresh) setStages([]);
+    setRecordTag(null);
+    if (refresh) setStages([]), setCards([]);
   };
 
   const clickDeleteCard = async (record: any) => {
     await deleteCard(record.id);
     const newCards = cards.filter(card => card.id !== record.id);
     setCards(newCards);
+    loadingStages();
   };
 
   const clickDeleteStage = async (record: any) => {
@@ -132,7 +137,7 @@ const Stage = ({ demandId }: Props) => {
               {
                 label: (
                   <Popconfirm
-                    title="Tem certeza de que deseja desabilitar este registro et?"
+                    title="Tem certeza de que deseja desabilitar este registro?"
                     onConfirm={() => clickDeleteStage(record)}
                   >
                     Excluir
@@ -169,7 +174,7 @@ const Stage = ({ demandId }: Props) => {
                 },
               },
               {
-                label: 'Adcionar etiqueta',
+                label: 'Criar nova etiqueta',
                 key: '2',
                 onClick: () => {
                   setRecordCard(record);
@@ -207,12 +212,14 @@ const Stage = ({ demandId }: Props) => {
       </Space>
     );
   };
+
   const renderTag = (record: any) => {
     const card = record;
     if (card.tag !== null) {
       const cor = card.tag.cor;
       return <TagFilled style={{ color: cor }}></TagFilled>;
     }
+    return null;
   };
 
   return (
@@ -255,7 +262,13 @@ const Stage = ({ demandId }: Props) => {
                     stage.cards.map(card => (
                       <div className="card" key={card.id}>
                         <div className="tag-wrapper">
-                          <Button className="button-icon">
+                          <Button
+                            className="button-icon"
+                            onClick={() => {
+                              setRecordTag(card.tag);
+                              setShowTagModal(true); // Abre o modal da tag
+                            }}
+                          >
                             {renderTag({ ...card })}
                           </Button>
                         </div>
@@ -296,7 +309,7 @@ const Stage = ({ demandId }: Props) => {
           )}
 
           <ModalTag
-            id={recordTag.id}
+            id={recordTag?.id}
             cardId={recordCard?.id}
             openModal={showTagModal}
             closeModal={hideModal}

@@ -1,6 +1,11 @@
-import { Modal, Form, Input, Col, message } from 'antd';
+import { Modal, Form, Input, Col, message, Button } from 'antd';
 import { useEffect, useState } from 'react';
-import { getTag, postTag, updateTag } from '../../services/axios/tagService';
+import {
+  deleteTag,
+  getTag,
+  postTag,
+  updateTag,
+} from '../../services/axios/tagService';
 
 type Props = {
   updateCardsList: any;
@@ -13,7 +18,8 @@ type Props = {
 const ModalTag = ({ updateCardsList, id, openModal, closeModal }: Props) => {
   const [form] = Form.useForm();
   const [tags, setTags] = useState<any[]>([]);
-  //const [stages, setStages] = useState<{ id: string; name: string }[]>([]);
+
+  console.log('id', id);
 
   const handleOk = (e: any) => {
     e.preventDefault();
@@ -40,20 +46,19 @@ const ModalTag = ({ updateCardsList, id, openModal, closeModal }: Props) => {
   }, [id]);
 
   async function loadingTags() {
-    try {
-      const response = await getTag(`tag`);
-      if (response !== false) {
-        console.log(response.data);
-        form.setFieldsValue({
-          id: response.data.id,
-          name: response.data.name,
-          cor: response.data.cor,
-        });
-      } else {
-        message.error('Ocorreu um erro inesperado ao obter as etiquetas.');
-      }
-    } catch (error) {
-      message.error('Ocorreu um erro inesperado ao obter as etiquetas.');
+    if (id) {
+      await getTag(`tag/${id}`).then(response => {
+        if (response !== false) {
+          console.log('tag', response.data);
+          form.setFieldsValue({
+            id: response.data.id,
+            name: response.data.name,
+            cor: response.data.cor,
+          });
+        } else {
+          message.error('Ocorreu um erro inesperado ao obter as etapas.');
+        }
+      });
     }
   }
 
@@ -67,6 +72,10 @@ const ModalTag = ({ updateCardsList, id, openModal, closeModal }: Props) => {
     const editingStage = form.getFieldsValue(true);
     await postTag(editingStage);
     updateCardsList(editingStage); // Chama a função updateAxleList com o novo axle
+  };
+  const clickDeleteTag = async (record: any) => {
+    await deleteTag(record.id);
+    loadingTags();
   };
 
   return (
@@ -111,6 +120,9 @@ const ModalTag = ({ updateCardsList, id, openModal, closeModal }: Props) => {
             >
               <Input />
             </Form.Item>
+          </Col>
+          <Col offset={1} span={16}>
+            <Button onClick={() => clickDeleteTag(tags)}></Button>
           </Col>
         </Form>
       </Modal>

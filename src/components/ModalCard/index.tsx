@@ -30,8 +30,6 @@ const ModalCard = ({
   const [selectStageId, setSelectedStageId] = useState('');
   const [selectTagId, setSelectedTagId] = useState('');
 
-  const { Option } = Select;
-
   const handleOk = (e: any) => {
     e.preventDefault();
     form
@@ -59,16 +57,13 @@ const ModalCard = ({
       try {
         const response = await getCard(`card/${id}`);
         if (response !== false) {
-          console.log(response.data);
-          const cardData = {
+          form.setFieldsValue({
             id: response.data.id,
             name: response.data.name,
             description: response.data.description,
             stage: response.data.stage.id,
-            tag: response.data.tag ? response.data.tag.id : null,
-            comment: response.data.comment,
-          };
-          form.setFieldsValue(cardData);
+            tag: response.data?.tag ? response.data.tag.id : null,
+          });
         } else {
           message.error('Ocorreu um erro inesperado ao obter os cartões.');
         }
@@ -127,7 +122,6 @@ const ModalCard = ({
     setSelectedTagId(value); // Atualiza o estado com o ID selecionado
   }
 
-  console.log('ta', tags);
   return (
     <>
       <Modal
@@ -176,7 +170,7 @@ const ModalCard = ({
           </Col>
 
           <Row gutter={16}>
-            <Col offset={1} span={10}>
+            <Col offset={1} span={11}>
               <Form.Item
                 name={['stage']}
                 label="Etapa"
@@ -205,11 +199,12 @@ const ModalCard = ({
                 />
               </Form.Item>
             </Col>
-            <Col offset={4} span={8}>
-              <Form.Item name={['tag']} label="Etiqueta" hasFeedback>
+
+            <Col offset={3} span={9}>
+              <Form.Item name={['tag']} label="Etiqueta">
                 <Select
                   showSearch
-                  placeholder="Selecione a etiqueta"
+                  placeholder={'Selecione a etiqueta'}
                   onChange={value => handleSelectTag(value)}
                   value={selectTagId}
                   filterOption={(input, option) =>
@@ -227,7 +222,7 @@ const ModalCard = ({
           </Row>
 
           <Col offset={1} span={17}>
-            <Form.Item name="comment" label="Comentario" hasFeedback>
+            <Form.Item name="comment" label="Comentario">
               <Input.TextArea
                 autoSize={{ minRows: 2, maxRows: 6 }} // Configuração para permitir a quebra de linha
                 style={{ height: '70px' }}
