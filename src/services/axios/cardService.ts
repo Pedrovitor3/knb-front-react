@@ -45,7 +45,7 @@ export async function postCard(card: Card) {
 export const updateCard = async (card: Card, id: any) => {
   try {
     await APICard.put(`card/${id}`, card);
-    message.success('cadastrado com sucesso');
+    message.success('Editado com sucesso');
   } catch (error) {
     if (error === 500) {
       message.info('O tempo da sua sessão expirou, faça o login novamente');

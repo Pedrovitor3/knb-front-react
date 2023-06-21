@@ -1,12 +1,11 @@
 /* Estilos para a página Trello */
-.body {
+.body-demand {
   margin: 0;
   padding: 0;
   display: flex;
   justify-content: space-around;
   padding: 20px;
   font-family: "Helvetica Neue", Arial, sans-serif;
-  max-width: 100%;
 }
 
 /* Botões */
@@ -23,21 +22,22 @@
   border: transparent;
 }
 
-.title {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
+.button-icon{
+  border: 0;
+  margin: 0px;
+  padding: 0;
 }
 
-/* Estilos para as fases */
-.stage {
+
+/* Estilos para as stages*/
+.stage-demand {
   flex: 1;
   margin: 0px 5px;
   padding: 10px;
   background-color: #f4f4f4;
   border-radius: 6px;
   position: relative;
-  min-width: 30px;
+  min-width: 250px;
 }
 
 .stage-title {
@@ -53,10 +53,6 @@
   justify-content: space-between;
 }
 
-.stage-icon {
-  margin-left: 10px;
-}
-
 .stage-cards {
   font-size: 22px;
   text-align: center;
@@ -64,8 +60,8 @@
   color: rgba(17, 16, 16, 0.918);
 }
 
-/* Estilos para as demandas */
-.card {
+/* Estilos para as cards */
+.card-demand {
   padding: 10px;
   margin-bottom: 10px !important;
   background-color: #fff;
@@ -76,19 +72,20 @@
 
 .card-title {
   font-size: 16px;
-  margin-bottom: 5px;
+  margin: 0px 0px 5px 5px;
   color: black;
 }
 
+
+
+
+/* Estilos para ícones */
 .tag-wrapper {
   position: absolute;
   top: 0;
   left: 0;
 }
-.card-title {
-  margin-left: 20px;
-}
-/* Estilos para ícones */
+
 .icon-wrapper-card {
   visibility: hidden;
   top: 50%;
@@ -105,24 +102,7 @@
   position: absolute;
 }
 
-.card:hover .icon-wrapper-card,
-.stage:hover .icon-wrapper-stage {
+.card-demand:hover .icon-wrapper-card,
+.stage-demand:hover .icon-wrapper-stage {
   visibility: visible;
-}
-
-.modal-board {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.modal-board .ant-modal-content {
-  width: 600px;
-}
-
-
-.button-icon{
-  border: 0;
-  margin: 0px;
-  padding: 0;
 }

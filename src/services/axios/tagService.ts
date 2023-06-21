@@ -45,7 +45,7 @@ export async function postTag(tag: Tag) {
 export const updateTag = async (tag: Tag, id: any) => {
   try {
     await APITag.put(`tag/${id}`, tag);
-    message.success('cadastrado com sucesso');
+    message.success('Editado com sucesso');
   } catch (error) {
     if (error === 500) {
       message.info('O tempo da sua sessão expirou, faça o login novamente');
@@ -63,6 +63,7 @@ export const updateTag = async (tag: Tag, id: any) => {
 export async function deleteTag(id: any) {
   try {
     await APITag.delete(`tag/${id}`);
+    message.warning('etiqueta excluida');
   } catch (error) {
     if (error === 500) {
       message.info('O tempo da sua sessão expirou, faça o login novamente');

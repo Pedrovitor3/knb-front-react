@@ -244,10 +244,10 @@ const Stage = ({ demandId }: Props) => {
           Criar novo card
         </Button>
 
-        <div className="body">
+        <div className="body-demand">
           {stages.length > 0 ? (
             stages.map(stage => (
-              <div className="stage" key={stage.id}>
+              <div className="stage-demand" key={stage.id}>
                 <div className="stage-header">
                   <h2 className="stage-title">
                     <span className="icon-wrapper-stage">
@@ -257,10 +257,10 @@ const Stage = ({ demandId }: Props) => {
                   </h2>
                 </div>
 
-                <div className="card-list">
+                <div className="card-list-demand">
                   {stage.cards ? (
                     stage.cards.map(card => (
-                      <div className="card" key={card.id}>
+                      <div className="card-demand" key={card.id}>
                         <div className="tag-wrapper">
                           <Button
                             className="button-icon"

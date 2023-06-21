@@ -17,9 +17,6 @@ type Props = {
 
 const ModalTag = ({ updateCardsList, id, openModal, closeModal }: Props) => {
   const [form] = Form.useForm();
-  const [tags, setTags] = useState<any[]>([]);
-
-  console.log('id', id);
 
   const handleOk = (e: any) => {
     e.preventDefault();
@@ -42,40 +39,47 @@ const ModalTag = ({ updateCardsList, id, openModal, closeModal }: Props) => {
   }, []);
 
   useEffect(() => {
-    loadingTags();
+    if (id) {
+      loadingTags();
+    }
   }, [id]);
 
   async function loadingTags() {
     if (id) {
-      await getTag(`tag/${id}`).then(response => {
-        if (response !== false) {
-          console.log('tag', response.data);
-          form.setFieldsValue({
-            id: response.data.id,
-            name: response.data.name,
-            cor: response.data.cor,
-          });
-        } else {
-          message.error('Ocorreu um erro inesperado ao obter as etapas.');
-        }
-      });
+      const response = await getTag(`tag/${id}`);
+      if (response && response.data) {
+        form.setFieldsValue({
+          id: response.data.id,
+          name: response.data.name,
+          cor: response.data.cor,
+        });
+      } else {
+        message.error('Ocorreu um erro inesperado ao obter as etapas.');
+      }
     }
   }
 
   const submitUpdate = async () => {
     const editingStage = form.getFieldsValue(true);
-    await updateTag(editingStage, id);
-    updateCardsList(editingStage); // Chama a função updateAxleList com o novo axle
+    if (id) {
+      await updateTag(editingStage, id);
+      updateCardsList(editingStage);
+    }
   };
 
   const submitCreate = async () => {
     const editingStage = form.getFieldsValue(true);
     await postTag(editingStage);
-    updateCardsList(editingStage); // Chama a função updateAxleList com o novo axle
+    updateCardsList(editingStage);
   };
-  const clickDeleteTag = async (record: any) => {
-    await deleteTag(record.id);
-    loadingTags();
+
+  const clickDeleteTag = async () => {
+    const editingStage = form.getFieldsValue(true);
+    if (id) {
+      await deleteTag(id);
+      closeModal(true);
+      updateCardsList(editingStage);
+    }
   };
 
   return (
@@ -122,7 +126,7 @@ const ModalTag = ({ updateCardsList, id, openModal, closeModal }: Props) => {
             </Form.Item>
           </Col>
           <Col offset={1} span={16}>
-            <Button onClick={() => clickDeleteTag(tags)}></Button>
+            <Button onClick={() => clickDeleteTag()}></Button>
           </Col>
         </Form>
       </Modal>
