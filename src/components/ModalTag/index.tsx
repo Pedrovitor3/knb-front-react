@@ -27,7 +27,6 @@ type Props = {
 const ModalTag = ({ updateCardsList, id, openModal, closeModal }: Props) => {
   const [form] = Form.useForm();
   const [selectedColor, setSelectedColor] = useState('');
-
   const handleOk = (e: any) => {
     e.preventDefault();
     form
@@ -56,6 +55,7 @@ const ModalTag = ({ updateCardsList, id, openModal, closeModal }: Props) => {
     if (id) {
       const response = await getTag(`tag/${id}`);
       if (response && response.data) {
+        console.log('a', response.data.cor);
         form.setFieldsValue({
           id: response.data.id,
           name: response.data.name,
@@ -92,12 +92,9 @@ const ModalTag = ({ updateCardsList, id, openModal, closeModal }: Props) => {
   };
 
   const handleColorChange = (color: any) => {
+    console.log('as', color);
     setSelectedColor(color);
   };
-
-  const colorPicker = (
-    <ColorPicker value={selectedColor} onChange={handleColorChange} />
-  );
 
   return (
     <>
@@ -129,7 +126,7 @@ const ModalTag = ({ updateCardsList, id, openModal, closeModal }: Props) => {
           </Col>
           <Col offset={1} span={16}>
             <Form.Item name="cor" label="Cor" hasFeedback>
-              {colorPicker}
+              <ColorPicker value={selectedColor} onChange={handleColorChange} />
             </Form.Item>
           </Col>
           <Col offset={1} span={16}>

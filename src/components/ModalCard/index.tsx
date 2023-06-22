@@ -8,6 +8,7 @@ import {
 } from '../../services/axios/cardService';
 import { getStage } from '../../services/axios/stageService';
 import { getTag } from '../../services/axios/tagService';
+import { Option } from 'antd/es/mentions';
 
 type Props = {
   updateCardsList: any;
@@ -198,6 +199,7 @@ const ModalCard = ({
                     value: stage.id,
                   }))}
                 />
+                <Option value="null">Nenhuma</Option>
               </Form.Item>
             </Col>
 
