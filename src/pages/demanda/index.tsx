@@ -33,10 +33,11 @@ interface DataType {
 type DataIndex = keyof DataType;
 
 type Props = {
+  setChave: (id: string) => void;
   demandId: string;
 };
 
-const Stage = ({ demandId }: Props) => {
+const Stage = ({ demandId, setChave }: Props) => {
   const [stages, setStages] = useState<DataType[]>([]);
   const [cards, setCards] = useState<CardProps[]>([]);
 
@@ -217,14 +218,31 @@ const Stage = ({ demandId }: Props) => {
     const card = record;
     if (card.tag !== null) {
       const cor = card.tag.cor;
+      if (cor === 'transparent') {
+        return <TagFilled style={{ color: cor }}></TagFilled>;
+      }
       return <TagFilled style={{ color: cor }}></TagFilled>;
     }
     return null;
   };
 
+  const handleDemandClick = () => {
+    setChave('4');
+  };
+
   return (
     <>
       <div>
+        <Button
+          className="botao-voltar"
+          type="primary"
+          onClick={() => {
+            setChave('5');
+            handleDemandClick();
+          }}
+        >
+          Voltar
+        </Button>
         <Button
           className="botao-criar"
           type="primary"

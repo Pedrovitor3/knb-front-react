@@ -976,7 +976,9 @@ const Sistema: React.FC = () => {
                           onDemandIdChange={handleDemandIdChange}
                         />
                       ), // Pass handleDemandIdChange as prop/>,
-                      '5': <Stage demandId={demandId} />,
+                      '5': (
+                        <Stage setChave={setChildrenMenu} demandId={demandId} />
+                      ),
                     }[chave]
                   }
                 </>

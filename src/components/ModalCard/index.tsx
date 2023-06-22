@@ -63,6 +63,7 @@ const ModalCard = ({
             description: response.data.description,
             stage: response.data.stage.id,
             tag: response.data?.tag ? response.data.tag.id : null,
+            comment: response.data.comment,
           });
         } else {
           message.error('Ocorreu um erro inesperado ao obter os cartões.');
@@ -163,7 +164,7 @@ const ModalCard = ({
               hasFeedback
             >
               <Input.TextArea
-                autoSize={{ minRows: 2, maxRows: 6 }} // Configuração para permitir a quebra de linha
+                autoSize={{ minRows: 2, maxRows: 6 }}
                 style={{ height: '70px' }}
               />
             </Form.Item>
@@ -224,7 +225,7 @@ const ModalCard = ({
           <Col offset={1} span={17}>
             <Form.Item name="comment" label="Comentario">
               <Input.TextArea
-                autoSize={{ minRows: 2, maxRows: 6 }} // Configuração para permitir a quebra de linha
+                autoSize={{ minRows: 2, maxRows: 6 }}
                 style={{ height: '70px' }}
               />
             </Form.Item>

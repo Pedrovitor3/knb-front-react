@@ -8,9 +8,14 @@
   font-family: "Helvetica Neue", Arial, sans-serif;
 }
 
+
 /* Botões */
 .botao-criar {
   margin: 0 15px 5px;
+}
+
+.botao-voltar{
+  margin: 0 15px 5px 27px;
 }
 
 .botao-card {
@@ -36,8 +41,6 @@
   padding: 10px;
   background-color: #f4f4f4;
   border-radius: 6px;
-  position: relative;
-  min-width: 250px;
 }
 
 .stage-title {

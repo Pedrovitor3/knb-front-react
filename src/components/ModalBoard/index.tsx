@@ -116,12 +116,15 @@ const ModalBoard = ({ updateDemandList, id, closeModal, openModal }: Props) => {
               rules={[
                 {
                   required: true,
-                  message: 'Por favor, insira a descrição da demanda',
+                  message: 'Por favor, insira a descrição do cartão',
                 },
               ]}
               hasFeedback
             >
-              <Input />
+              <Input.TextArea
+                autoSize={{ minRows: 2, maxRows: 6 }}
+                style={{ height: '70px' }}
+              />
             </Form.Item>
           </Col>
           <Col offset={1} span={16}>

@@ -1,4 +1,13 @@
-import { Modal, Form, Input, Col, message, Button } from 'antd';
+import {
+  Modal,
+  Form,
+  Input,
+  Col,
+  message,
+  Button,
+  Row,
+  ColorPicker,
+} from 'antd';
 import { useEffect, useState } from 'react';
 import {
   deleteTag,
@@ -17,6 +26,7 @@ type Props = {
 
 const ModalTag = ({ updateCardsList, id, openModal, closeModal }: Props) => {
   const [form] = Form.useForm();
+  const [selectedColor, setSelectedColor] = useState('');
 
   const handleOk = (e: any) => {
     e.preventDefault();
@@ -39,9 +49,7 @@ const ModalTag = ({ updateCardsList, id, openModal, closeModal }: Props) => {
   }, []);
 
   useEffect(() => {
-    if (id) {
-      loadingTags();
-    }
+    loadingTags();
   }, [id]);
 
   async function loadingTags() {
@@ -75,12 +83,21 @@ const ModalTag = ({ updateCardsList, id, openModal, closeModal }: Props) => {
 
   const clickDeleteTag = async () => {
     const editingStage = form.getFieldsValue(true);
+
     if (id) {
       await deleteTag(id);
       closeModal(true);
       updateCardsList(editingStage);
     }
   };
+
+  const handleColorChange = (color: any) => {
+    setSelectedColor(color);
+  };
+
+  const colorPicker = (
+    <ColorPicker value={selectedColor} onChange={handleColorChange} />
+  );
 
   return (
     <>
@@ -111,22 +128,14 @@ const ModalTag = ({ updateCardsList, id, openModal, closeModal }: Props) => {
             </Form.Item>
           </Col>
           <Col offset={1} span={16}>
-            <Form.Item
-              name="cor"
-              label="Cor"
-              rules={[
-                {
-                  required: true,
-                  message: 'Por favor, insira o nome da etapa',
-                },
-              ]}
-              hasFeedback
-            >
-              <Input />
+            <Form.Item name="cor" label="Cor" hasFeedback>
+              {colorPicker}
             </Form.Item>
           </Col>
           <Col offset={1} span={16}>
-            <Button onClick={() => clickDeleteTag()}></Button>
+            <Row style={{ display: 'inline-block' }}>
+              <Button onClick={() => clickDeleteTag()}>Deletar Etiqueta</Button>
+            </Row>
           </Col>
         </Form>
       </Modal>

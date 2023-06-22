@@ -1,3 +1,4 @@
+import { getConfig } from '../../configs/sistemaConfig';
 import { APICard } from './baseService/baseService';
 import { message } from 'antd';
 
@@ -7,18 +8,18 @@ interface Card {
 
 export async function getCard(url: any) {
   try {
-    const response = await APICard.get(url);
+    const response = await APICard.get(url, getConfig('priv'));
     return response;
   } catch (error) {
     if (error === 500) {
       message.info('O tempo da sua sessão expirou, faça o login novamente');
     } else if (error !== 401) {
       message.error(
-        'Não foi possível obter a lista de eixos, tente novamente mais tarde.',
+        'Não foi possível carregar os cartões, tente novamente mais tarde.',
       );
     }
     console.error(
-      `An unexpected error occurred while retrieving the axle list.${error}`,
+      `An unexpected error occurred while retrieving the cards list.${error}`,
     );
   }
   return false;
@@ -26,54 +27,54 @@ export async function getCard(url: any) {
 
 export async function postCard(card: Card) {
   try {
-    await APICard.post('/card', card);
+    await APICard.post('/card', card, getConfig('priv'));
     message.success('cadastrado com sucesso');
   } catch (error) {
     if (error === 500) {
       message.info('O tempo da sua sessão expirou, faça o login novamente');
     } else if (error !== 401) {
       message.error(
-        'Não foi possível obter a lista de eixos, tente novamente mais tarde.',
+        'Não foi possível carregar os cartões, tente novamente mais tarde.',
       );
     }
     console.error(
-      `An unexpected error occurred while retrieving the axle list.${error}`,
+      `An unexpected error occurred while retrieving the axle list list.${error}`,
     );
   }
 }
 
 export const updateCard = async (card: Card, id: any) => {
   try {
-    await APICard.put(`card/${id}`, card);
+    await APICard.put(`card/${id}`, card, getConfig('priv'));
     message.success('Editado com sucesso');
   } catch (error) {
     if (error === 500) {
       message.info('O tempo da sua sessão expirou, faça o login novamente');
     } else if (error !== 401) {
       message.error(
-        'Não foi possível obter a lista de eixos, tente novamente mais tarde.',
+        'Não foi possível carregar os cartões, tente novamente mais tarde.',
       );
     }
     console.error(
-      `An unexpected error occurred while retrieving the axle list.${error}`,
+      `An unexpected error occurred while retrieving the axle list list.${error}`,
     );
   }
 };
 
 export async function deleteCard(id: any) {
   try {
-    await APICard.delete(`card/${id}`);
+    await APICard.delete(`card/${id}`, getConfig('priv'));
     message.warning('cartão excluido');
   } catch (error) {
     if (error === 500) {
       message.info('O tempo da sua sessão expirou, faça o login novamente');
     } else if (error !== 401) {
       message.error(
-        'Não foi possível obter a lista de eixos, tente novamente mais tarde.',
+        'Não foi possível carregar os cartões, tente novamente mais tarde.',
       );
     }
     console.error(
-      `An unexpected error occurred while retrieving the axle list.${error}`,
+      `An unexpected error occurred while retrieving the axle list list.${error}`,
     );
   }
 }
