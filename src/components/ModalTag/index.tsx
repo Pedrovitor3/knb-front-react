@@ -1,20 +1,13 @@
-import {
-  Modal,
-  Form,
-  Input,
-  Col,
-  message,
-  Button,
-  Row,
-  ColorPicker,
-} from 'antd';
-import { useEffect, useState } from 'react';
+import { Modal, Form, Input, Col, message, Button, Row, Popover } from 'antd';
+import { SetStateAction, useEffect, useState } from 'react';
 import {
   deleteTag,
   getTag,
   postTag,
   updateTag,
 } from '../../services/axios/tagService';
+
+import { SketchPicker } from 'react-color';
 
 type Props = {
   updateCardsList: any;
@@ -26,7 +19,8 @@ type Props = {
 
 const ModalTag = ({ updateCardsList, id, openModal, closeModal }: Props) => {
   const [form] = Form.useForm();
-  const [selectedColor, setSelectedColor] = useState('');
+  const [color, setColor] = useState('#000000'); // Estado para armazenar a cor selecionada
+
   const handleOk = (e: any) => {
     e.preventDefault();
     form
@@ -55,12 +49,12 @@ const ModalTag = ({ updateCardsList, id, openModal, closeModal }: Props) => {
     if (id) {
       const response = await getTag(`tag/${id}`);
       if (response && response.data) {
-        console.log('a', response.data.cor);
         form.setFieldsValue({
           id: response.data.id,
           name: response.data.name,
           cor: response.data.cor,
         });
+        setColor(response.data.cor); // Define a cor selecionada do estado
       } else {
         message.error('Ocorreu um erro inesperado ao obter as etapas.');
       }
@@ -91,10 +85,14 @@ const ModalTag = ({ updateCardsList, id, openModal, closeModal }: Props) => {
     }
   };
 
-  const handleColorChange = (color: any) => {
-    console.log('as', color);
-    setSelectedColor(color);
+  const handleColorChange = (color: { hex: SetStateAction<string> }) => {
+    setColor(color.hex); // Atualiza a cor selecionada no estado
+    form.setFieldsValue({ cor: color.hex }); // Atualiza o campo 'cor' do formulário
   };
+
+  const colorPicker = (
+    <SketchPicker color={color} onChange={handleColorChange} />
+  );
 
   return (
     <>
@@ -125,8 +123,24 @@ const ModalTag = ({ updateCardsList, id, openModal, closeModal }: Props) => {
             </Form.Item>
           </Col>
           <Col offset={1} span={16}>
-            <Form.Item name="cor" label="Cor" hasFeedback>
-              <ColorPicker value={selectedColor} onChange={handleColorChange} />
+            <Form.Item
+              name="cor"
+              label="Cor"
+              hasFeedback
+              style={{ marginBottom: 0 }}
+            >
+              <Popover content={colorPicker} trigger="click">
+                <div
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    borderRadius: '5px',
+                    border: '1px black solid',
+                    background: color,
+                    marginBottom: '25px',
+                  }}
+                />
+              </Popover>
             </Form.Item>
           </Col>
           <Col offset={1} span={16}>

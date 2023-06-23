@@ -8,10 +8,13 @@
   font-family: "Helvetica Neue", Arial, sans-serif;
 }
 
-
 /* Botões */
 .botao-criar {
   margin: 0 15px 5px;
+}
+
+.container{
+  max-width: 100%;
 }
 
 .botao-voltar{
@@ -41,10 +44,12 @@
   padding: 10px;
   background-color: #f4f4f4;
   border-radius: 6px;
+ /* min-width: 120px; */
+  position: relative;
 }
 
 .stage-title {
-  font-size: 22px;
+  font-size: 20px;
   text-align: center;
   margin-bottom: 25px;
   color: rgba(17, 16, 16, 0.918);
@@ -99,6 +104,7 @@
 
 .icon-wrapper-stage {
   visibility: hidden;
+  font-size: 18px;
   top: 25px;
   right: 15px;
   transform: translate(50%, -50%);

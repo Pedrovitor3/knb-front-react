@@ -578,6 +578,7 @@ import {
   Modal,
   List,
   Drawer,
+  Divider,
 } from 'antd';
 import React, { useEffect, useState } from 'react';
 import Dashboard from '../dashboard';
@@ -1020,7 +1021,6 @@ const Sistema: React.FC = () => {
         onClose={actionDrawer}
         //open={openDrawer}
       >
-        {/*
         <p style={{ fontSize: 18, fontWeight: 700 }}>{auth?.user?.nome}</p>
         <p>
           {auth?.user?.corporacaoAtual ? auth?.user?.corporacaoAtual.nome : ''}{' '}
@@ -1028,7 +1028,7 @@ const Sistema: React.FC = () => {
         </p>
         <Divider>Unidades</Divider>
         <p>Unidade:</p>
-        <p>{auth?.user?.unidade.nome}</p>
+        <p>{auth?.user?.unidade?.nome}</p>
         <Divider />
         <p>Unidades de Trabalho:</p>
         <p>&nbsp;</p>
@@ -1040,7 +1040,7 @@ const Sistema: React.FC = () => {
           <strong>Sistema / Perfil</strong>
         </p>
         <p>&nbsp;</p>
-      */}
+
         {auth?.user?.perfis.map((perfil: any) => {
           let sistema: JSX.Element | null = null;
           if (perfil.sistema.descricao == sistemaNameSSO) {

@@ -48,13 +48,11 @@ const Stage = ({ demandId, setChave }: Props) => {
   const [showStageModal, setShowStageModal] = useState(false);
   const [showCardModal, setShowCardModal] = useState(false);
   const [showTagModal, setShowTagModal] = useState(false);
-  const [showCommentModal, setShowCommentModal] = useState(false);
 
   useEffect(() => {
     setShowStageModal(false);
     setShowCardModal(false);
     setShowTagModal(false);
-    setShowCommentModal(false);
     loadingStages();
   }, []);
 
@@ -85,7 +83,6 @@ const Stage = ({ demandId, setChave }: Props) => {
     setShowStageModal(false);
     setShowCardModal(false);
     setShowTagModal(false);
-    setShowCommentModal(false);
     setRecordCard(null);
     setRecordStage(null);
     setRecordTag(null);
@@ -111,8 +108,6 @@ const Stage = ({ demandId, setChave }: Props) => {
       setShowCardModal(true);
     } else if (e.key === '2') {
       setShowTagModal(true);
-    } else if (e.key === '3') {
-      setShowCommentModal(true);
     }
   };
 
@@ -182,13 +177,6 @@ const Stage = ({ demandId, setChave }: Props) => {
                 },
               },
               {
-                label: 'Adcionar comentario',
-                key: '3',
-                onClick: () => {
-                  setRecordCard(record);
-                },
-              },
-              {
                 label: (
                   <Popconfirm
                     title="Tem certeza de que deseja desabilitar este registro ?"
@@ -197,7 +185,7 @@ const Stage = ({ demandId, setChave }: Props) => {
                     Excluir
                   </Popconfirm>
                 ),
-                key: '4',
+                key: '3',
                 danger: true,
               },
             ],
@@ -218,9 +206,7 @@ const Stage = ({ demandId, setChave }: Props) => {
     const card = record;
     if (card.tag !== null) {
       const cor = card.tag.cor;
-      if (cor === 'transparent') {
-        return <TagFilled style={{ color: cor }}></TagFilled>;
-      }
+      console.log('cor', cor);
       return <TagFilled style={{ color: cor }}></TagFilled>;
     }
     return null;
@@ -232,7 +218,7 @@ const Stage = ({ demandId, setChave }: Props) => {
 
   return (
     <>
-      <div>
+      <div className="container">
         <Button
           className="botao-voltar"
           type="primary"

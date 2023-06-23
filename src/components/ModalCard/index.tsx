@@ -58,6 +58,7 @@ const ModalCard = ({
       try {
         const response = await getCard(`card/${id}`);
         if (response !== false) {
+          console.log(response.data);
           form.setFieldsValue({
             id: response.data.id,
             name: response.data.name,
@@ -186,7 +187,7 @@ const ModalCard = ({
               >
                 <Select
                   showSearch
-                  placeholder="Selecione o objeto"
+                  placeholder="Selecione a etapa"
                   onChange={value => handleSelectStage(value)}
                   value={selectStageId}
                   filterOption={(input, option) =>
@@ -199,7 +200,6 @@ const ModalCard = ({
                     value: stage.id,
                   }))}
                 />
-                <Option value="null">Nenhuma</Option>
               </Form.Item>
             </Col>
 
@@ -219,7 +219,9 @@ const ModalCard = ({
                     label: tag.name,
                     value: tag.id,
                   }))}
-                />
+                >
+                  <Option value="null">Nenhuma</Option>
+                </Select>
               </Form.Item>
             </Col>
           </Row>
