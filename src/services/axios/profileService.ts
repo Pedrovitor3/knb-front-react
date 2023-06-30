@@ -1,5 +1,5 @@
 import { getConfig } from '../../configs/sistemaConfig';
-import { APIProfile } from './baseService/baseService';
+import { APIDemands } from './baseService/baseService';
 import { message } from 'antd';
 
 interface Profile {
@@ -8,7 +8,7 @@ interface Profile {
 
 export async function getProfile(url: any) {
   try {
-    const response = await APIProfile.get(url, getConfig('priv'));
+    const response = await APIDemands.get(url, getConfig('priv'));
     return response;
   } catch (error) {
     if (error === 500) {
@@ -27,7 +27,7 @@ export async function getProfile(url: any) {
 
 export async function postProfile(profile: Profile) {
   try {
-    await APIProfile.post('/profile', profile, getConfig('priv'));
+    await APIDemands.post('/profile', profile, getConfig('priv'));
     message.success('cadastrado com sucesso');
   } catch (error) {
     if (error === 500) {
@@ -45,7 +45,7 @@ export async function postProfile(profile: Profile) {
 
 export const updateProfile = async (profile: Profile, id: any) => {
   try {
-    await APIProfile.put(`profile/${id}`, profile, getConfig('priv'));
+    await APIDemands.put(`profile/${id}`, profile, getConfig('priv'));
     message.success('cadastrado com sucesso');
   } catch (error) {
     if (error === 500) {
@@ -63,7 +63,7 @@ export const updateProfile = async (profile: Profile, id: any) => {
 
 export async function deleteProfile(id: any) {
   try {
-    await APIProfile.delete(`profile/${id}`, getConfig('priv'));
+    await APIDemands.delete(`profile/${id}`, getConfig('priv'));
   } catch (error) {
     if (error === 500) {
       message.info('O tempo da sua sessão expirou, faça o login novamente');

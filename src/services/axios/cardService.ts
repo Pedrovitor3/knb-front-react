@@ -1,5 +1,5 @@
 import { getConfig } from '../../configs/sistemaConfig';
-import { APICard } from './baseService/baseService';
+import { APIDemands } from './baseService/baseService';
 import { message } from 'antd';
 
 interface Card {
@@ -8,7 +8,7 @@ interface Card {
 
 export async function getCard(url: any) {
   try {
-    const response = await APICard.get(url, getConfig('priv'));
+    const response = await APIDemands.get(url, getConfig('priv'));
     return response;
   } catch (error) {
     if (error === 500) {
@@ -27,7 +27,7 @@ export async function getCard(url: any) {
 
 export async function postCard(card: Card) {
   try {
-    await APICard.post('/card', card, getConfig('priv'));
+    await APIDemands.post('/card', card, getConfig('priv'));
     message.success('cadastrado com sucesso');
   } catch (error) {
     if (error === 500) {
@@ -45,7 +45,7 @@ export async function postCard(card: Card) {
 
 export const updateCard = async (card: Card, id: any) => {
   try {
-    await APICard.put(`card/${id}`, card, getConfig('priv'));
+    await APIDemands.put(`card/${id}`, card, getConfig('priv'));
     message.success('Editado com sucesso');
   } catch (error) {
     if (error === 500) {
@@ -63,7 +63,7 @@ export const updateCard = async (card: Card, id: any) => {
 
 export async function deleteCard(id: any) {
   try {
-    await APICard.delete(`card/${id}`, getConfig('priv'));
+    await APIDemands.delete(`card/${id}`, getConfig('priv'));
     message.warning('cartão excluido');
   } catch (error) {
     if (error === 500) {

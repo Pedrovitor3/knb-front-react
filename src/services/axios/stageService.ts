@@ -1,5 +1,5 @@
 import { getConfig } from '../../configs/sistemaConfig';
-import { APIStage } from './baseService/baseService';
+import { APIDemands } from './baseService/baseService';
 import { message } from 'antd';
 
 interface Stage {
@@ -8,7 +8,7 @@ interface Stage {
 
 export async function getStage(url: any) {
   try {
-    const response = await APIStage.get(url, getConfig('priv'));
+    const response = await APIDemands.get(url, getConfig('priv'));
     return response;
   } catch (error) {
     if (error === 500) {
@@ -27,7 +27,7 @@ export async function getStage(url: any) {
 
 export async function postStage(stage: Stage) {
   try {
-    await APIStage.post('/stage', stage, getConfig('priv'));
+    await APIDemands.post('/stage', stage, getConfig('priv'));
     message.success('cadastrado com sucesso');
   } catch (error) {
     if (error === 500) {
@@ -45,7 +45,7 @@ export async function postStage(stage: Stage) {
 
 export const updateStage = async (stage: Stage, id: any) => {
   try {
-    await APIStage.put(`stage/${id}`, stage, getConfig('priv'));
+    await APIDemands.put(`stage/${id}`, stage, getConfig('priv'));
     message.success('cadastrado com sucesso');
   } catch (error) {
     if (error === 500) {
@@ -63,7 +63,7 @@ export const updateStage = async (stage: Stage, id: any) => {
 
 export async function deleteStage(id: any) {
   try {
-    await APIStage.delete(`stage/${id}`, getConfig('priv'));
+    await APIDemands.delete(`stage/${id}`, getConfig('priv'));
     message.warning('Etapa excluida');
   } catch (error) {
     if (error === 500) {

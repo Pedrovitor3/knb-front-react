@@ -1,5 +1,5 @@
 import { getConfig } from '../../configs/sistemaConfig';
-import { APITag } from './baseService/baseService';
+import { APIDemands } from './baseService/baseService';
 import { message } from 'antd';
 
 interface Tag {
@@ -8,7 +8,7 @@ interface Tag {
 
 export async function getTag(url: any) {
   try {
-    const response = await APITag.get(url, getConfig('priv'));
+    const response = await APIDemands.get(url, getConfig('priv'));
     return response;
   } catch (error) {
     if (error === 500) {
@@ -27,7 +27,7 @@ export async function getTag(url: any) {
 
 export async function postTag(tag: Tag) {
   try {
-    await APITag.post('/tag', tag, getConfig('priv'));
+    await APIDemands.post('/tag', tag, getConfig('priv'));
     message.success('cadastrado com sucesso');
   } catch (error) {
     if (error === 500) {
@@ -45,7 +45,7 @@ export async function postTag(tag: Tag) {
 
 export const updateTag = async (tag: Tag, id: any) => {
   try {
-    await APITag.put(`tag/${id}`, tag, getConfig('priv'));
+    await APIDemands.put(`tag/${id}`, tag, getConfig('priv'));
     message.success('Editado com sucesso');
   } catch (error) {
     if (error === 500) {
@@ -63,7 +63,7 @@ export const updateTag = async (tag: Tag, id: any) => {
 
 export async function deleteTag(id: any) {
   try {
-    await APITag.delete(`tag/${id}`, getConfig('priv'));
+    await APIDemands.delete(`tag/${id}`, getConfig('priv'));
     message.warning('etiqueta excluida');
   } catch (error) {
     if (error === 500) {

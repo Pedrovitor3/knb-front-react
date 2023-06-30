@@ -1,21 +1,3 @@
-import {
-  APIAnswer,
-  APICard,
-  APIComment,
-  APIDemand,
-  APIProfile,
-  APIAxle,
-  APIStage,
-  APIUsersDemand,
-} from './baseService';
+import { APIDemands } from './baseService';
 
-export {
-  APIAnswer,
-  APICard,
-  APIComment,
-  APIDemand,
-  APIProfile,
-  APIAxle,
-  APIStage,
-  APIUsersDemand,
-};
+export { APIDemands };

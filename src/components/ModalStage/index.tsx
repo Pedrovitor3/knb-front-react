@@ -51,7 +51,6 @@ const ModalStage = ({
     if (id) {
       await getStage(`stage/${id}`).then(response => {
         if (response !== false) {
-          console.log('stage', response.data);
           form.setFieldsValue({
             id: response.data.id,
             name: response.data.name,

@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { APIDemand } from './baseService/baseService';
+import { APIDemands } from './baseService/baseService';
 import { getConfig } from '../../configs/sistemaConfig';
 
 interface Demand {
@@ -8,7 +8,7 @@ interface Demand {
 
 export async function getDemand(url: any) {
   try {
-    const response = await APIDemand.get(url, getConfig('priv'));
+    const response = await APIDemands.get(url, getConfig('priv'));
     return response;
   } catch (error) {
     if (error === 500) {
@@ -27,7 +27,7 @@ export async function getDemand(url: any) {
 
 export async function postDemand(demand: Demand) {
   try {
-    await APIDemand.post('/demand', demand, getConfig('priv'));
+    await APIDemands.post('/demand', demand, getConfig('priv'));
     message.success('cadastrado com sucesso');
   } catch (error) {
     if (error === 500) {
@@ -45,7 +45,7 @@ export async function postDemand(demand: Demand) {
 
 export const updateDemand = async (demand: Demand, id: any) => {
   try {
-    await APIDemand.put(`demand/${id}`, demand, getConfig('priv'));
+    await APIDemands.put(`demand/${id}`, demand, getConfig('priv'));
     message.success('cadastrado com sucesso');
   } catch (error) {
     if (error === 500) {
@@ -63,7 +63,7 @@ export const updateDemand = async (demand: Demand, id: any) => {
 
 export async function deleteDemand(id: any) {
   try {
-    await APIDemand.delete(`demand/${id}`, getConfig('priv'));
+    await APIDemands.delete(`demand/${id}`, getConfig('priv'));
     message.warning('cartão excluido');
   } catch (error) {
     if (error === 500) {
