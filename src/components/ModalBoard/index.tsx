@@ -8,16 +8,6 @@ import {
 
 const { Option } = Select;
 
-{
-  /*
-type Props = {
-  id?: string;
-  openModal: boolean;
-  closeModal: (refresh: boolean) => void;
-};
-*/
-}
-
 type Props = {
   updateDemandList: any;
   id?: string;
@@ -116,7 +106,7 @@ const ModalBoard = ({ updateDemandList, id, closeModal, openModal }: Props) => {
               rules={[
                 {
                   required: true,
-                  message: 'Por favor, insira a descrição do cartão',
+                  message: 'Por favor, insira a descrição da demanda',
                 },
               ]}
               hasFeedback

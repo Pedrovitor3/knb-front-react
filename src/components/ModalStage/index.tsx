@@ -22,7 +22,6 @@ const ModalStage = ({
   closeModal,
 }: Props) => {
   const [form] = Form.useForm();
-  //const [stages, setStages] = useState<{ id: string; name: string }[]>([]);
 
   const handleOk = (e: any) => {
     e.preventDefault();
@@ -68,13 +67,13 @@ const ModalStage = ({
   const submitUpdate = async () => {
     const editingStage = form.getFieldsValue(true);
     await updateStage(editingStage, id);
-    updateStagesList(editingStage); // Chama a função updateAxleList com o novo axle
+    updateStagesList(editingStage);
   };
 
   const submitCreate = async () => {
     const editingStage = form.getFieldsValue(true);
     await postStage(editingStage);
-    updateStagesList(editingStage); // Chama a função updateAxleList com o novo axle
+    updateStagesList(editingStage);
   };
 
   return (

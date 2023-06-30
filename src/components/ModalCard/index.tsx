@@ -118,11 +118,11 @@ const ModalCard = ({
   };
 
   function handleSelectStage(value: any) {
-    setSelectedStageId(value); // Atualiza o estado com o ID selecionado
+    setSelectedStageId(value);
   }
 
   function handleSelectTag(value: any) {
-    setSelectedTagId(value); // Atualiza o estado com o ID selecionado
+    setSelectedTagId(value);
   }
 
   return (
@@ -145,7 +145,7 @@ const ModalCard = ({
               rules={[
                 {
                   required: true,
-                  message: 'Por favor, insira o nome da demanda',
+                  message: 'Por favor, insira o nome do cartão',
                 },
               ]}
               hasFeedback
@@ -180,7 +180,7 @@ const ModalCard = ({
                 rules={[
                   {
                     required: true,
-                    message: 'Por favor, insira a descrição do cartão',
+                    message: 'Por favor, insira a etapa do cartão',
                   },
                 ]}
                 hasFeedback
@@ -229,6 +229,7 @@ const ModalCard = ({
           <Col offset={1} span={17}>
             <Form.Item name="comment" label="Comentario">
               <Input.TextArea
+                placeholder="Observações:"
                 autoSize={{ minRows: 2, maxRows: 6 }}
                 style={{ height: '70px' }}
               />

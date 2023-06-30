@@ -116,7 +116,6 @@ const Board = ({ setChave, onDemandIdChange }: Props) => {
     onDemandIdChange(demandId);
   };
 
-  // Update columns and position the demands within the respective column
   useEffect(() => {
     const updatedColumns = columns.map(column => ({
       ...column,
@@ -162,18 +161,11 @@ const Board = ({ setChave, onDemandIdChange }: Props) => {
         </div>
       </div>
 
-      {/*<ModalBoard
-        id={recordDemand?.id}
-        closeModal={hideModal}
-        openModal={showModal}
-      />
-      */}
-
       <ModalBoard
         updateDemandList={updateDemandList}
         id={recordDemand?.id}
         closeModal={hideModal}
-        openModal={showModal} // Passa a função handleAxleCreated como prop
+        openModal={showModal}
       />
     </div>
   );

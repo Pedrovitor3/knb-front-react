@@ -56,7 +56,7 @@ const ModalTag = ({ updateCardsList, id, openModal, closeModal }: Props) => {
         });
         setColor(response.data.cor); // Define a cor selecionada do estado
       } else {
-        message.error('Ocorreu um erro inesperado ao obter as etapas.');
+        message.error('Ocorreu um erro inesperado ao obter as etiquetas.');
       }
     }
   }
@@ -86,8 +86,8 @@ const ModalTag = ({ updateCardsList, id, openModal, closeModal }: Props) => {
   };
 
   const handleColorChange = (color: { hex: SetStateAction<string> }) => {
-    setColor(color.hex); // Atualiza a cor selecionada no estado
-    form.setFieldsValue({ cor: color.hex }); // Atualiza o campo 'cor' do formulário
+    setColor(color.hex);
+    form.setFieldsValue({ cor: color.hex });
   };
 
   const colorPicker = (
@@ -114,7 +114,7 @@ const ModalTag = ({ updateCardsList, id, openModal, closeModal }: Props) => {
               rules={[
                 {
                   required: true,
-                  message: 'Por favor, insira o nome da etapa',
+                  message: 'Por favor, insira o nome da etiqueta',
                 },
               ]}
               hasFeedback

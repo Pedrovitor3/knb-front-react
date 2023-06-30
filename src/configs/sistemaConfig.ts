@@ -1,8 +1,8 @@
-export const sistemaNameSSO = 'Gerenciamento de Demandas';
-export const sistemaDescricao = 'Plataforma para gerenciamento de demandas.';
+export const sistemaNameSSO = 'SIDEM';
+export const sistemaDescricao = 'Sistema para gerenciamento de demandas.';
 export const sistemaVersao = '1.0.0-00';
-export const domainNameProd = 'gmospc.ssp.go.gov.br';
-export const domainNameHomo = 'gmospc-homo.ssp.go.gov.br';
+export const domainNameProd = 'SIDEM.ssp.go.gov.br';
+export const domainNameHomo = 'http://SIDEM.intra.goias.gov.br';
 
 export const domainNameDesv = 'localhost';
 
